@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
     EditText email;
     EditText password;
     Button btnLogin;
+    Button btnRegister;
     String user, pass;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +21,17 @@ public class MainActivity extends AppCompatActivity {
         email = (EditText)findViewById(R.id.editText_email);
         password = (EditText)findViewById(R.id.editText_password);
         btnLogin = (Button)findViewById(R.id.button_login);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnRegister = (Button)findViewById(R.id.button_register);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(MainActivity.this, Register.class);
+                startActivity(in);
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
                 user = email.getText().toString();
@@ -30,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void validate(String user, String pass) {
         if (user.equals("") && pass.equals("")) {

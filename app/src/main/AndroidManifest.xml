@@ -11,6 +11,7 @@
         android:theme="@style/Theme.Budget">
         <activity android:name=".ViewPage" />
         <activity android:name=".MonthBudget" />
+        <activity android:name=".Register" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
