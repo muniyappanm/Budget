@@ -109,9 +109,9 @@ public class MonthBudget extends AppCompatActivity
                     public void onClick(View v) {
                         Integer deletedRows = myDb.deleteData(editTextId.getText().toString());
                         if(deletedRows > 0)
-                            Toast.makeText(MonthBudget.this,"Data Deleted",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MonthBudget.this,"Data Deleted",Toast.LENGTH_SHORT).show();
                         else
-                            Toast.makeText(MonthBudget.this,"Data not Deleted",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MonthBudget.this,"Data not Deleted",Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -125,9 +125,9 @@ public class MonthBudget extends AppCompatActivity
                                 editName.getText().toString(),
                                 editSurname.getSelectedItem().toString(),editMarks.getText().toString());
                         if(isUpdate == true)
-                            Toast.makeText(MonthBudget.this,"Data Update",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MonthBudget.this,"Data Update",Toast.LENGTH_SHORT).show();
                         else
-                            Toast.makeText(MonthBudget.this,"Data not Updated",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MonthBudget.this,"Data not Updated",Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -147,9 +147,9 @@ public class MonthBudget extends AppCompatActivity
 
                         }
                         else Toast.makeText(MonthBudget.this,
-                                "Enter Date,Item, Rate and then Press Create Button",Toast.LENGTH_LONG).show();
+                                "Enter Date,Item, Rate and then Press Create Button",Toast.LENGTH_SHORT).show();
                         if(isInserted == true)
-                            Toast.makeText(MonthBudget.this,"Data Inserted",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MonthBudget.this,"Data Inserted",Toast.LENGTH_SHORT).show();
                     }
                 }
         );

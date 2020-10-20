@@ -17,9 +17,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="125dp"
         android:text="Email"
-        android:textAlignment="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_horizontal" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/textView2"
@@ -32,32 +30,26 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="10dp"
         android:text="Password"
-        android:textAlignment="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_horizontal" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
         android:id="@+id/editText_email"
         android:layout_width="400dp"
         android:layout_height="50dp"
-        android:layout_alignTop="@+id/textView"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/textView"
-        android:layout_toRightOf="@+id/textView"
-        android:inputType="date" />
+        android:layout_below="@+id/textView"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/editText_password"
         android:layout_width="400dp"
         android:layout_height="50dp"
-        android:layout_alignTop="@+id/textView2"
         android:layout_marginStart="25dp"
         android:layout_marginLeft="25dp"
         android:layout_marginTop="2dp"
-        android:layout_toEndOf="@+id/textView2"
-        android:layout_toRightOf="@+id/textView2"
+        android:layout_below="@+id/textView2"
         android:inputType="text"></EditText>
 
 
@@ -67,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="100dp"
+        android:layout_below="@+id/editText_password"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="10dp"
         android:text="Login" />
@@ -74,10 +67,13 @@
         android:id="@+id/button_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/editText_password"
+        android:layout_toEndOf="@+id/button_login"
         android:layout_centerVertical="true"
-        android:layout_marginStart="200dp"
+        android:layout_marginStart="10dp"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="10dp"
-        android:text="Register" />
+        android:text="Register"
+        android:layout_toRightOf="@+id/button_login" />
 
 </RelativeLayout>

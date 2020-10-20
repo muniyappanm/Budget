@@ -5,15 +5,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
     EditText email;
     EditText password;
     Button btnLogin;
     Button btnRegister;
     String user, pass;
+    private FirebaseAuth auth;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Login");
@@ -21,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         email = (EditText)findViewById(R.id.editText_email);
         password = (EditText)findViewById(R.id.editText_password);
         btnLogin = (Button)findViewById(R.id.button_login);
+        auth=FirebaseAuth.getInstance();
         btnRegister = (Button)findViewById(R.id.button_register);
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,14 +45,22 @@ public class MainActivity extends AppCompatActivity {
                 user = email.getText().toString();
                 pass = password.getText().toString();
                 validate(user, pass);
-                AlertDialog.Builder build = new AlertDialog.Builder(MainActivity.this);
             }
         });
     }
 
 
     public void validate(String user, String pass) {
-        if (user.equals("") && pass.equals("")) {
+        if (!user.equals("") || !pass.equals(""))
+        auth.signInWithEmailAndPassword(user,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+            }
+        });
+        else Toast.makeText(MainActivity.this, "Empty Credentials", Toast.LENGTH_SHORT).show();
+
+        /*if (user.equals("") && pass.equals("")) {
             Intent in = new Intent(MainActivity.this, MonthBudget.class);
             startActivity(in);
         } else {
@@ -54,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog alert = build.create();
             alert.show();
 
-        }
+        }*/
     }
 
     }

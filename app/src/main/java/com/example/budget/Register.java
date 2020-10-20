@@ -38,9 +38,9 @@ public class Register extends AppCompatActivity
                 mail=email.getText().toString();
                 pass=password.getText().toString();
                 if(mail.isEmpty()||pass.isEmpty())
-                    Toast.makeText(Register.this,"Empty Credentials",Toast.LENGTH_LONG).show();
+                    Toast.makeText(Register.this,"Empty Credentials",Toast.LENGTH_SHORT).show();
                 else if(pass.length()<4)
-                    Toast.makeText(Register.this,"Password too short",Toast.LENGTH_LONG).show();
+                    Toast.makeText(Register.this,"Password too short",Toast.LENGTH_SHORT).show();
                 else
                     RegisterUser(mail,pass);
             }
@@ -54,13 +54,13 @@ public class Register extends AppCompatActivity
             public void onComplete(@NonNull Task<AuthResult> task)
             {
                 if(task.isSuccessful()) {
-                    Toast.makeText(Register.this, "Register Successful", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Register.this, "Register Successful", Toast.LENGTH_SHORT).show();
                     Intent in = new Intent(Register.this, MainActivity.class);
                     startActivity(in);
 
                 }
                 else
-                    Toast.makeText(Register.this, "Register Failed... Try Again and make sure internet connected", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Register.this, "Register Failed... Try Again and make sure internet connected", Toast.LENGTH_SHORT).show();
 
             }
         });

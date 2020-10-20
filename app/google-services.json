@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "419780933429",
-    "firebase_url": "https://muni-253200.firebaseio.com",
-    "project_id": "muni-253200",
-    "storage_bucket": "muni-253200.appspot.com"
+    "project_number": "817996437182",
+    "firebase_url": "https://budget-577a6.firebaseio.com",
+    "project_id": "budget-577a6",
+    "storage_bucket": "budget-577a6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:419780933429:android:6213f982141b4fcbd23e7c",
+        "mobilesdk_app_id": "1:817996437182:android:deaf40bb3813ab1e34b0ef",
         "android_client_info": {
           "package_name": "com.example.budget"
         }
       },
       "oauth_client": [
         {
-          "client_id": "419780933429-lcm30uo45hab391stq2hend33tcu673v.apps.googleusercontent.com",
+          "client_id": "817996437182-lof3jbk4ieqe2tbo7mkclv0b2i3e4o5a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC9P-HxwAFwkh0aJVHtCw0w4thQ2gkIJ-I"
+          "current_key": "AIzaSyARLLa-IgOYn2ltGmFpDFOB-KRtR92AdAs"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "419780933429-lcm30uo45hab391stq2hend33tcu673v.apps.googleusercontent.com",
+              "client_id": "817996437182-lof3jbk4ieqe2tbo7mkclv0b2i3e4o5a.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
