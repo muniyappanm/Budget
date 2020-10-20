@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(AuthResult authResult) {
                 Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                Intent in = new Intent(MainActivity.this, MonthBudget.class);
+                startActivity(in);
             }
         });
         else Toast.makeText(MainActivity.this, "Empty Credentials", Toast.LENGTH_SHORT).show();
