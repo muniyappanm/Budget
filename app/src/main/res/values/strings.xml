@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string name="app_name">Budget</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string-array name="Item_array">
+        <item>kitchen Item</item>
+        <item>Fruits</item>
+        <item>Sweet</item>
+        <item>Dress</item>
+        <item>Petrol</item>
+        <item>Personal Care</item>
+        <item>Others</item>
+        <item>All</item>
+    </string-array>
+
+</resources>
