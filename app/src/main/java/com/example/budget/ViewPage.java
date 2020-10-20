@@ -1,11 +1,9 @@
 package com.example.budget;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Intent;
+
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
 public class ViewPage extends AppCompatActivity {
@@ -14,7 +12,7 @@ public class ViewPage extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setTitle("List of Purchase");
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_viewpage);
 
         ListView lstview=(ListView)findViewById(R.id.listview);
         // Inflate header view
