@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
     Button btnviewUpdate;
     Button btnTotal;
     TextView txtToatl;
-    int i=0;
     DatePickerDialog datePickerDialog;
     Calendar c=Calendar.getInstance();
     int yyyy=c.get(Calendar.YEAR);
