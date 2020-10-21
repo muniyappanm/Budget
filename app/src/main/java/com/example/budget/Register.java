@@ -15,6 +15,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Register extends AppCompatActivity
 {
@@ -54,10 +59,23 @@ public class Register extends AppCompatActivity
             public void onComplete(@NonNull Task<AuthResult> task)
             {
                 if(task.isSuccessful()) {
-                    Toast.makeText(Register.this, "Register Successful", Toast.LENGTH_SHORT).show();
-                    Intent in = new Intent(Register.this, MainActivity.class);
-                    startActivity(in);
-
+                    Map<String ,Object> data= new HashMap<>();
+                    data.put("count",0);
+                    FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
+                    assert user != null;
+                    FirebaseFirestore db=FirebaseFirestore.getInstance();
+                    db.collection("Budget").document(user.getUid()).collection("Counter")
+                            .document("Counter").set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful())
+                            {
+                                Toast.makeText(Register.this, "Register Successful", Toast.LENGTH_SHORT).show();
+                                Intent in = new Intent(Register.this, MainActivity.class);
+                                startActivity(in);
+                            }
+                        }
+                    });
                 }
                 else
                     Toast.makeText(Register.this, "Register Failed... Try Again and make sure internet connected", Toast.LENGTH_SHORT).show();
