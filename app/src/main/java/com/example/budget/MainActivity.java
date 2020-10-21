@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void validate(String user, String pass) {
-        if (!user.equals("") || !pass.equals(""))
+        if (!user.equals("") && !pass.equals(""))
         auth.signInWithEmailAndPassword(user,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
