@@ -118,6 +118,7 @@ public class FireBaseHandler extends AppCompatActivity
         else if(Date.isEmpty()&&!Rate.isEmpty()) doc.update("Item", Item, "Rate", Rate);
         else if(!Date.isEmpty()&&Rate.isEmpty()) doc.update("Date", Date, "Item", Item);
         else doc.update("Item",Item);
+        Toast.makeText(monthBudget,"Data Updated",Toast.LENGTH_SHORT).show();
     }
 
 }
