@@ -137,6 +137,10 @@ public class MonthBudget extends AppCompatActivity
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        FireBaseHandler db=new FireBaseHandler();
+                        db.Add(editName.getText().toString(),
+                                editSurname.getSelectedItem().toString(),
+                                editMarks.getText().toString());
                         boolean isInserted=false;
                         if(!editName.getText().toString().equals("")& !editSurname.getSelectedItem().toString().equals("")&
                                 !editMarks.getText().toString().equals(""))
