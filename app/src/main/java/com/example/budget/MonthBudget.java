@@ -283,3 +283,11 @@ public class MonthBudget extends AppCompatActivity
     }
 
 }
+
+//public class MainActivity extends AppCompatActivity {
+//    DatabaseHandler myDB;
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+//
