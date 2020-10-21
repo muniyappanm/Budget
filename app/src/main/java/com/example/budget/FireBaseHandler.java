@@ -25,7 +25,7 @@ public class FireBaseHandler extends AppCompatActivity
     {
         FirebaseFirestore db=FirebaseFirestore.getInstance();
         Map<String ,Object> data= new HashMap<>();
-        DocumentReference doc=FirebaseFirestore.getInstance().collection("Budget").document("counter");
+        DocumentReference doc=FirebaseFirestore.getInstance().collection("Counter").document("counter");
         doc.update("count",FieldValue.increment(1));
         doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -81,7 +81,7 @@ public class FireBaseHandler extends AppCompatActivity
                     });
         else if(Date.isEmpty())
             if(Item.equals("All"))
-                   doc= FirebaseFirestore.getInstance().collection("Budget").whereNotEqualTo("except","except")
+                   doc= FirebaseFirestore.getInstance().collection("Budget")
                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
