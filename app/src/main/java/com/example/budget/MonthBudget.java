@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -41,6 +42,7 @@ public class MonthBudget extends AppCompatActivity
     Button btnDelete;
     Button btnviewUpdate;
     Button btnTotal;
+    Button btnLogout;
     TextView txtToatl;
     DatePickerDialog datePickerDialog;
     Calendar c=Calendar.getInstance();
@@ -82,11 +84,24 @@ public class MonthBudget extends AppCompatActivity
         btnDelete= (Button)findViewById(R.id.button_delete);
         btnTotal= (Button)findViewById(R.id.button_total);
         txtToatl= (TextView)findViewById(R.id.textView_total);
+        btnLogout= (Button)findViewById(R.id.button_logout);
         AddData();
         viewAll();
         UpdateData();
         DeleteData();
         Total();
+        Logout();
+    }
+
+    private void Logout() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(MonthBudget.this,"Logged Out",Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MonthBudget.this,MainActivity.class));
+            }
+        });
     }
 
     private void Total() {
