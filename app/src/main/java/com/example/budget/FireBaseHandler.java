@@ -114,13 +114,9 @@ public class FireBaseHandler extends AppCompatActivity
 
     public void Update(String ID, String Date, String Item, String Rate, MonthBudget monthBudget) {
         DocumentReference doc=FirebaseFirestore.getInstance().collection("Budget").document(ID);
-        if(!Date.isEmpty()&&!Rate.isEmpty())
-        doc.update("Date",Date,"Item",Item,"Rate",Rate);
-        else if(Date.isEmpty()||Rate.isEmpty())
-        {
-            if (Date.isEmpty()) doc.update("Item", Item, "Rate", Rate);
-            else doc.update("Date", Date, "Item", Item);
-        }
+        if(!Date.isEmpty()&&!Rate.isEmpty()) doc.update("Date",Date,"Item",Item,"Rate",Rate);
+        else if(Date.isEmpty()&&!Rate.isEmpty()) doc.update("Item", Item, "Rate", Rate);
+        else if(!Date.isEmpty()&&Rate.isEmpty()) doc.update("Date", Date, "Item", Item);
         else doc.update("Item",Item);
     }
 
