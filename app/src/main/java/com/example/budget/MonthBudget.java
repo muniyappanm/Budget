@@ -168,7 +168,7 @@ public class MonthBudget extends AppCompatActivity
                     @Override
                     public void onClick(View v) {
                         if(editName.getText().toString().isEmpty()||
-                                editSurname.getSelectedItem().toString()=="All"||editMarks.getText().toString().isEmpty())
+                                editSurname.getSelectedItem().toString().equals("All")||editMarks.getText().toString().isEmpty())
                             Toast.makeText(MonthBudget.this,
                                     "Please enter Date,Rate and select Item other than All before ADD",Toast.LENGTH_SHORT).show();
                         else
