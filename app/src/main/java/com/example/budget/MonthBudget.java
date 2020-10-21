@@ -93,16 +93,30 @@ public class MonthBudget extends AppCompatActivity
         btnTotal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Cursor res = myDb.getSelectedData(editName.getText().toString(),
-                        editSurname.getSelectedItem().toString());
+
+                Task<QuerySnapshot> data=db.View( editName.getText().toString(),
+                        editSurname.getSelectedItem().toString(),MonthBudget.this);
+                if(data.getResult().isEmpty())
+                {
+                    showMessage("Error","Nothing found");
+                    return;
+                }
                 List<String> list = new ArrayList<String>();
+                int total=0;
+                for (QueryDocumentSnapshot Qdoc:data.getResult())
+                {
+                    Map<String ,Object> Mlist= Qdoc.getData();
+                  total+= Integer.parseInt(Mlist.get("Rate").toString());
+                }
+                /*Cursor res = myDb.getSelectedData(editName.getText().toString(),
+                        editSurname.getSelectedItem().toString());
                 while (res.moveToNext()) {
                     list.add(res.getString(3));
                 }
                 int total=0;
                 for(String x:list)
                     total+=Integer.parseInt(x);
-
+*/
                 txtToatl.setText("Rs."+Integer.toString(total));
             }
         });
@@ -113,11 +127,14 @@ public class MonthBudget extends AppCompatActivity
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Integer deletedRows = myDb.deleteData(editTextId.getText().toString());
-                        if(deletedRows > 0)
+                        if(editTextId.getText().toString().isEmpty())
+                            Toast.makeText(MonthBudget.this,"Please enter ID to Delete",Toast.LENGTH_SHORT).show();
+                        else db.delete(editTextId.getText().toString(),MonthBudget.this);
+                       /*  myDb.deleteData(editTextId.getText().toString(),MonthBudget.this);
+                       if(deletedRows > 0)
                             Toast.makeText(MonthBudget.this,"Data Deleted",Toast.LENGTH_SHORT).show();
                         else
-                            Toast.makeText(MonthBudget.this,"Data not Deleted",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MonthBudget.this,"Data not Deleted",Toast.LENGTH_SHORT).show();*/
                     }
                 }
         );
@@ -127,13 +144,20 @@ public class MonthBudget extends AppCompatActivity
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        boolean isUpdate = myDb.updateData(editTextId.getText().toString(),
+                        if(editTextId.getText().toString().isEmpty())
+                            Toast.makeText(MonthBudget.this,"Please enter ID to Update",Toast.LENGTH_SHORT).show();
+                        else if(editSurname.getSelectedItem().toString()=="All")
+                            Toast.makeText(MonthBudget.this,"Please select Item Other than All",Toast.LENGTH_SHORT).show();
+                        else db.Update(editTextId.getText().toString(),
+                                editName.getText().toString(),
+                                editSurname.getSelectedItem().toString(),editMarks.getText().toString(),MonthBudget.this);
+                        /*boolean isUpdate = myDb.updateData(editTextId.getText().toString(),
                                 editName.getText().toString(),
                                 editSurname.getSelectedItem().toString(),editMarks.getText().toString());
                         if(isUpdate == true)
                             Toast.makeText(MonthBudget.this,"Data Update",Toast.LENGTH_SHORT).show();
                         else
-                            Toast.makeText(MonthBudget.this,"Data not Updated",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MonthBudget.this,"Data not Updated",Toast.LENGTH_SHORT).show();*/
                     }
                 }
         );
@@ -143,10 +167,15 @@ public class MonthBudget extends AppCompatActivity
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(editName.getText().toString().isEmpty()||
+                                editSurname.getSelectedItem().toString()=="All"||editMarks.getText().toString().isEmpty())
+                            Toast.makeText(MonthBudget.this,
+                                    "Please enter Date,Rate and select Item other than All before ADD",Toast.LENGTH_SHORT).show();
+                        else
                         db.Add(editName.getText().toString(),
                                 editSurname.getSelectedItem().toString(),
                                 editMarks.getText().toString(),MonthBudget.this);
-                        boolean isInserted=false;
+                       /* boolean isInserted=false;
                         if(!editName.getText().toString().equals("")& !editSurname.getSelectedItem().toString().equals("")&
                                 !editMarks.getText().toString().equals(""))
                         {
@@ -158,7 +187,7 @@ public class MonthBudget extends AppCompatActivity
                         else Toast.makeText(MonthBudget.this,
                                 "Enter Date,Item, Rate and then Press Create Button",Toast.LENGTH_SHORT).show();
                         if(isInserted == true)
-                            Toast.makeText(MonthBudget.this,"Data Inserted",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MonthBudget.this,"Data Inserted",Toast.LENGTH_SHORT).show();*/
                     }
                 }
         );
@@ -169,7 +198,6 @@ public class MonthBudget extends AppCompatActivity
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Cursor res = myDb.getAllData();
                         Task<QuerySnapshot> data=db.View( editName.getText().toString(),
                                 editSurname.getSelectedItem().toString(),MonthBudget.this);
                         if(data.getResult().isEmpty())
@@ -185,7 +213,8 @@ public class MonthBudget extends AppCompatActivity
                                     "__"+Mlist.get("Item").toString()+"__"+Mlist.get("Rate").toString());
                         }
 
-                       /* if(res.getCount() == 0) {
+                       /* Cursor res = myDb.getAllData();
+                       if(res.getCount() == 0) {
                             // show message
                             showMessage("Error","Nothing found");
                             return;

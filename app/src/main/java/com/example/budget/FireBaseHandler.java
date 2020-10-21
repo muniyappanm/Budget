@@ -62,25 +62,37 @@ public class FireBaseHandler extends AppCompatActivity
         Map<String ,Object> data= new HashMap<>();
         Task<QuerySnapshot> doc=null;
         if(!Date.isEmpty())
-        doc= FirebaseFirestore.getInstance().collection("Budget")
-                .whereEqualTo("Date",Date).whereEqualTo("Item",Item).
+            if(Item.equals("All"))
+            doc= FirebaseFirestore.getInstance().collection("Budget")
+                .whereEqualTo("Date",Date).
                         get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         Toast.makeText(monthBudget,"Success",Toast.LENGTH_SHORT).show();
                     }
                 });
-        else if(Date.isEmpty())
-            doc= FirebaseFirestore.getInstance().collection("Budget")
-                    .whereEqualTo("Item",Item).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            else doc= FirebaseFirestore.getInstance().collection("Budget")
+                    .whereEqualTo("Date",Date).whereEqualTo("Item",Item).
+                            get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             Toast.makeText(monthBudget,"Success",Toast.LENGTH_SHORT).show();
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
+                    });
+        else if(Date.isEmpty())
+            if(Item.equals("All"))
+                   doc= FirebaseFirestore.getInstance().collection("Budget").whereNotEqualTo("except","except")
+                           .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            Toast.makeText(monthBudget,"Success",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            else doc= FirebaseFirestore.getInstance().collection("Budget")
+                    .whereEqualTo("Item",Item).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            Toast.makeText(monthBudget,"Success",Toast.LENGTH_SHORT).show();
                         }
                     });
         while (!doc.isComplete())
@@ -88,4 +100,28 @@ public class FireBaseHandler extends AppCompatActivity
         return doc;
 
     }
+
+    public void delete(String ID,MonthBudget monthBudget) {
+        FirebaseFirestore db=FirebaseFirestore.getInstance();
+        FirebaseFirestore.getInstance().collection("Budget").document(ID).delete().
+                addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(monthBudget,"Data Deleted",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void Update(String ID, String Date, String Item, String Rate, MonthBudget monthBudget) {
+        DocumentReference doc=FirebaseFirestore.getInstance().collection("Budget").document(ID);
+        if(!Date.isEmpty()&&!Rate.isEmpty())
+        doc.update("Date",Date,"Item",Item,"Rate",Rate);
+        else if(Date.isEmpty()||Rate.isEmpty())
+        {
+            if (Date.isEmpty()) doc.update("Item", Item, "Rate", Rate);
+            else doc.update("Date", Date, "Item", Item);
+        }
+        else doc.update("Item",Item);
+    }
+
 }
