@@ -19,13 +19,19 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 public class MonthBudget extends AppCompatActivity 
 {
     DatabaseHandler myDb;
+    FireBaseHandler db=new FireBaseHandler();
     EditText editName;
     Spinner editSurname;
     EditText editMarks;
@@ -137,10 +143,9 @@ public class MonthBudget extends AppCompatActivity
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        FireBaseHandler db=new FireBaseHandler();
                         db.Add(editName.getText().toString(),
                                 editSurname.getSelectedItem().toString(),
-                                editMarks.getText().toString());
+                                editMarks.getText().toString(),MonthBudget.this);
                         boolean isInserted=false;
                         if(!editName.getText().toString().equals("")& !editSurname.getSelectedItem().toString().equals("")&
                                 !editMarks.getText().toString().equals(""))
@@ -165,19 +170,32 @@ public class MonthBudget extends AppCompatActivity
                     @Override
                     public void onClick(View v) {
                         Cursor res = myDb.getAllData();
-                        if(res.getCount() == 0) {
+                        Task<QuerySnapshot> data=db.View( editName.getText().toString(),
+                                editSurname.getSelectedItem().toString(),MonthBudget.this);
+                        if(data.getResult().isEmpty())
+                        {
+                            showMessage("Error","Nothing found");
+                            return;
+                        }
+                        List<String> list = new ArrayList<String>();
+                        for (QueryDocumentSnapshot Qdoc:data.getResult())
+                        {
+                            Map<String ,Object> Mlist= Qdoc.getData();
+                            list.add(Mlist.get("count").toString()+"__"+Mlist.get("Date").toString()+
+                                    "__"+Mlist.get("Item").toString()+"__"+Mlist.get("Rate").toString());
+                        }
+
+                       /* if(res.getCount() == 0) {
                             // show message
                             showMessage("Error","Nothing found");
                             return;
                         }
 
-                        StringBuffer buffer = new StringBuffer();
-                        List<String> list = new ArrayList<String>();
                         while (res.moveToNext()) {
                             list.add(res.getString(0)+"__"+res.getString(1)+"__"+
                                     res.getString(2)+"__"+res.getString(3));
 
-                        }
+                        }*/
                         // Show all data
                         String[] items=list.toArray(new String[0]);
                         // Navigate to ViewPage with Parameter items String Array.
