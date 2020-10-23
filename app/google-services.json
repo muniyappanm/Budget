@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "956077973570",
+    "firebase_url": "https://userspcbudget.firebaseio.com",
+    "project_id": "userspcbudget",
+    "storage_bucket": "userspcbudget.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:956077973570:android:50b196e5bd6cd84d79cddb",
+        "android_client_info": {
+          "package_name": "com.example.budget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "956077973570-ohs8gjgbadviulollb0frfan3g1j5o2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtcr0noMdtyUqQSwV6cfEyawQzzxTdyIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "956077973570-ohs8gjgbadviulollb0frfan3g1j5o2s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

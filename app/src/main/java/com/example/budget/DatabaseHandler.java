@@ -81,7 +81,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return true;
     }
 
-    public Integer deleteData (String id) {
+    public Integer deleteData(String id, MonthBudget monthBudget) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_NAME, "ID = ?",new String[] {id});
     }

@@ -1,232 +1,94 @@
 package com.example.budget;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewDebug;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-    DatabaseHandler myDb;
-    EditText editName;
-    Spinner editSurname;
-    EditText editMarks;
-    EditText editTextId;
-    Button btnAddData;
-    Button btnviewAll;
-    Button btnDelete;
-    Button btnviewUpdate;
-    Button btnTotal;
-    TextView txtToatl;
-    DatePickerDialog datePickerDialog;
-    Calendar c=Calendar.getInstance();
-    int yyyy=c.get(Calendar.YEAR);
-    int mm=c.get(Calendar.MONTH);
-    int dd=c.get(Calendar.DAY_OF_MONTH);
-
+    EditText email;
+    EditText password;
+    Button btnLogin;
+    Button btnRegister;
+    String user, pass;
+    private FirebaseAuth auth;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Monthly Budget");
-        setContentView(R.layout.activity_main1);
-        myDb = new DatabaseHandler(this);
-        editName = (EditText)findViewById(R.id.editText_name);
-        editName.setOnClickListener
-                (new View.OnClickListener()
-                {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v)
-            {
-                datePickerDialog=new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener()
-                {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
-                    {
-                        editName.setText(dayOfMonth+"-"+month+"-"+year);
-
-                    }
-                }, yyyy,mm,dd);
-                        datePickerDialog.show();
-            }
-        });
-        editSurname = (Spinner)findViewById(R.id.editText_surname);
-        editMarks = (EditText)findViewById(R.id.editText_Marks);
-        editTextId = (EditText)findViewById(R.id.editText_id);
-        btnAddData = (Button)findViewById(R.id.button_add);
-        btnviewAll = (Button)findViewById(R.id.button_viewAll);
-        btnviewUpdate= (Button)findViewById(R.id.button_update);
-        btnDelete= (Button)findViewById(R.id.button_delete);
-        btnTotal= (Button)findViewById(R.id.button_total);
-        txtToatl= (TextView)findViewById(R.id.textView_total);
-        AddData();
-        viewAll();
-        UpdateData();
-        DeleteData();
-        Total();
-    }
-
-    private void Total() {
-        btnTotal.setOnClickListener(new View.OnClickListener() {
+        setTitle("Login");
+        setContentView(R.layout.activity_main);
+        email = (EditText)findViewById(R.id.editText_email);
+        password = (EditText)findViewById(R.id.editText_password);
+        btnLogin = (Button)findViewById(R.id.button_login);
+        auth=FirebaseAuth.getInstance();
+        btnRegister = (Button)findViewById(R.id.button_register);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Cursor res = myDb.getSelectedData(editName.getText().toString(),
-                        editSurname.getSelectedItem().toString());
-                List<String> list = new ArrayList<String>();
-                while (res.moveToNext()) {
-                    list.add(res.getString(3));
-                }
-                int total=0;
-                for(String x:list)
-                    total+=Integer.parseInt(x);
+                Intent in = new Intent(MainActivity.this, Register.class);
+                startActivity(in);
+            }
+        });
 
-                txtToatl.setText("Rs."+Integer.toString(total));
+        btnLogin.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                user = email.getText().toString();
+                pass = password.getText().toString();
+                validate(user, pass);
             }
         });
     }
 
-    public void DeleteData() {
-        btnDelete.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Integer deletedRows = myDb.deleteData(editTextId.getText().toString());
-                        if(deletedRows > 0)
-                            Toast.makeText(MainActivity.this,"Data Deleted",Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(MainActivity.this,"Data not Deleted",Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
-    }
-    public void UpdateData() {
-        btnviewUpdate.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        boolean isUpdate = myDb.updateData(editTextId.getText().toString(),
-                                editName.getText().toString(),
-                                editSurname.getSelectedItem().toString(),editMarks.getText().toString());
-                        if(isUpdate == true)
-                            Toast.makeText(MainActivity.this,"Data Update",Toast.LENGTH_LONG).show();
-                        else
-                            Toast.makeText(MainActivity.this,"Data not Updated",Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
-    }
-    public  void AddData() {
-        btnAddData.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        boolean isInserted=false;
-                        if(!editName.getText().toString().equals("")& !editSurname.getSelectedItem().toString().equals("")&
-                                !editMarks.getText().toString().equals(""))
-                        {
-                            isInserted = myDb.insertData(editName.getText().toString(),
-                               editSurname.getSelectedItem().toString(),
-                                 editMarks.getText().toString());
-
-                        }
-                        else Toast.makeText(MainActivity.this,
-                                "Enter Date,Item, Rate and then Press Create Button",Toast.LENGTH_LONG).show();
-                        if(isInserted == true)
-                            Toast.makeText(MainActivity.this,"Data Inserted",Toast.LENGTH_LONG).show();
-                    }
-                }
-        );
-    }
-
-   public void viewAll() {
-        btnviewAll.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Cursor res = myDb.getAllData();
-                        if(res.getCount() == 0) {
-                            // show message
-                            showMessage("Error","Nothing found");
-                            return;
-                        }
-
-                        StringBuffer buffer = new StringBuffer();
-                        List<String> list = new ArrayList<String>();
-                        while (res.moveToNext()) {
-                            list.add(res.getString(0)+"__"+res.getString(1)+"__"+
-                                    res.getString(2)+"__"+res.getString(3));
-
-                        }
-                        // Show all data
-                        String[] items=list.toArray(new String[0]);
-                        // Navigate to ViewPage with Parameter items String Array.
-                        Intent in = new Intent(MainActivity.this, ViewPage.class);
-                        in.putExtra("Item",items);
-                        startActivity(in);
-                    }
-
-                });
-    }
-
-    public void showMessage(String title,String Message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(true);
-        builder.setTitle(title);
-        builder.setMessage(Message);
-        builder.show();
-    }
-
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+        if(user!=null)
+            startActivity(new Intent(MainActivity.this,MonthBudget.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void validate(String user, String pass) {
+        if (!user.equals("") && !pass.equals(""))
+        auth.signInWithEmailAndPassword(user,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                Intent in = new Intent(MainActivity.this, MonthBudget.class);
+                startActivity(in);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, "User not Registered", Toast.LENGTH_SHORT).show();
+            }
+        });
+        else Toast.makeText(MainActivity.this, "Empty Credentials", Toast.LENGTH_SHORT).show();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        /*if (user.equals("") && pass.equals("")) {
+            Intent in = new Intent(MainActivity.this, MonthBudget.class);
+            startActivity(in);
+        } else {
+            AlertDialog.Builder build = new AlertDialog.Builder(MainActivity.this);
+            build.setTitle("Error").setMessage("Wrong username or password. Please enter correct credentials.")
+                    .setPositiveButton("ok", null).setCancelable(false);
+            AlertDialog alert = build.create();
+            alert.show();
 
-        return super.onOptionsItemSelected(item);
+        }*/
     }
 
-}
-
-//public class MainActivity extends AppCompatActivity {
-//    DatabaseHandler myDB;
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//        myDB=new DatabaseHandler(this);
-//    }
-//}
+    }
