@@ -12,27 +12,208 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MonthBudget extends AppCompatActivity 
 {
-    DatabaseHandler myDb;
+    public ArrayList<ExampleItem> mExampleItem=new ArrayList<>();
+    private RecyclerView mRecyclerView;
+    private ExampleAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private FloatingActionButton floatingActionButton;
     FireBaseHandler db=new FireBaseHandler();
+    DatePickerDialog datePickerDialog;
+    Calendar c=Calendar.getInstance();
+    int yyyy=c.get(Calendar.YEAR);
+    int mm=c.get(Calendar.MONTH);
+    int dd=c.get(Calendar.DAY_OF_MONTH);
+    TextView Date1;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_monthbudget);
+        createExampleList();
+        buildRecyclerView();
+        floatingActionButton=findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(MonthBudget.this, Popup.class);
+                startActivityForResult(in,1);
+            }
+        });
+        String date_n = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        Date1 = (TextView)findViewById(R.id.textView_date);
+        Date1.setText(date_n);
+    }
+    public void insertItem(int position, String txt1, String txt2) {
+        mExampleItem.add(new ExampleItem(R.drawable.ic_android,
+                txt1, txt2,
+                R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+    }
+    public void removeItem(int position) {
+        mExampleItem.remove(position);
+        mAdapter.notifyItemRemoved(position);
+    }
+    public void changeItem(int position, String text1,String text2) {
+        mExampleItem.get(position).changeText1(text1,text2);
+        mAdapter.notifyItemChanged(position);
+    }
+
+    public void createExampleList() {
+        mExampleItem.add(new ExampleItem(R.drawable.ic_android, "Line muniyappan muni", "Line 2",
+                R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+        mExampleItem.add(new ExampleItem(R.drawable.ic_audio, "Line 3", "Line 4",
+                R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+        mExampleItem.add(new ExampleItem(R.drawable.ic_sun, "Line 5", "Line 6",
+                R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+    }
+    public void buildRecyclerView() {
+        mRecyclerView=findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager=new LinearLayoutManager(this);
+        mAdapter=new ExampleAdapter(mExampleItem);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener()
+        {
+            @Override
+            public void onItemDelete(int position) {
+                mExampleItem.remove(position);
+                mAdapter.notifyItemRemoved(position);
+            }
+
+            @Override
+            public void onItemEdit(int position, ImageView edit,
+                                   ImageView delete, ImageView ok, EditText mTextView1, EditText mTextView2) {
+                edit.setVisibility(View.INVISIBLE);
+                delete.setVisibility(View.INVISIBLE);
+                ok.setVisibility(View.VISIBLE);
+                mTextView1.setEnabled(true);
+                mTextView2.setEnabled(true);
+
+            }
+
+            @Override
+            public void onItemOk(int position, ImageView edit,
+                                 ImageView delete, ImageView ok, EditText mTextView1, EditText mTextView2) {
+
+                changeItem(position,mTextView1.getText().toString(),mTextView2.getText().toString());
+                edit.setVisibility(View.VISIBLE);
+                delete.setVisibility(View.VISIBLE);
+                ok.setVisibility(View.INVISIBLE);
+
+            }
+        });
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1)
+            if(resultCode==RESULT_OK)
+            {
+                String txt1=data.getStringExtra("text1");
+                String txt2=data.getStringExtra("text2");
+                insertItem(1,txt1,txt2);
+
+            }
+    }
+
+    public  void AddData() {
+        btnAddData.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(editName.getText().toString().isEmpty()||
+                                editSurname.getSelectedItem().toString().equals("All")||editMarks.getText().toString().isEmpty())
+                            Toast.makeText(MonthBudget.this,
+                                    "Please enter Date,Rate and select Item other than All before ADD",Toast.LENGTH_SHORT).show();
+                        else
+                            db.Add(editName.getText().toString(),
+                                    editSurname.getSelectedItem().toString(),
+                                    editMarks.getText().toString(),MonthBudget.this);
+                       /* boolean isInserted=false;
+                        if(!editName.getText().toString().equals("")& !editSurname.getSelectedItem().toString().equals("")&
+                                !editMarks.getText().toString().equals(""))
+                        {
+                            isInserted = myDb.insertData(editName.getText().toString(),
+                                    editSurname.getSelectedItem().toString(),
+                                    editMarks.getText().toString());
+
+                        }
+                        else Toast.makeText(MonthBudget.this,
+                                "Enter Date,Item, Rate and then Press Create Button",Toast.LENGTH_SHORT).show();
+                        if(isInserted == true)
+                            Toast.makeText(MonthBudget.this,"Data Inserted",Toast.LENGTH_SHORT).show();*/
+                    }
+                }
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    DatabaseHandler myDb;
     EditText editName;
     Spinner editSurname;
     EditText editMarks;
@@ -44,13 +225,8 @@ public class MonthBudget extends AppCompatActivity
     Button btnTotal;
     Button btnLogout;
     TextView txtToatl;
-    DatePickerDialog datePickerDialog;
-    Calendar c=Calendar.getInstance();
-    int yyyy=c.get(Calendar.YEAR);
-    int mm=c.get(Calendar.MONTH);
-    int dd=c.get(Calendar.DAY_OF_MONTH);
 
-    protected void onCreate(Bundle savedInstanceState) {
+/*    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Monthly Budget");
         setContentView(R.layout.activity_monthbudget);
@@ -91,7 +267,7 @@ public class MonthBudget extends AppCompatActivity
         DeleteData();
         Total();
         Logout();
-    }
+    }*/
 
     private void Logout() {
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -173,36 +349,6 @@ public class MonthBudget extends AppCompatActivity
                             Toast.makeText(MonthBudget.this,"Data Update",Toast.LENGTH_SHORT).show();
                         else
                             Toast.makeText(MonthBudget.this,"Data not Updated",Toast.LENGTH_SHORT).show();*/
-                    }
-                }
-        );
-    }
-    public  void AddData() {
-        btnAddData.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(editName.getText().toString().isEmpty()||
-                                editSurname.getSelectedItem().toString().equals("All")||editMarks.getText().toString().isEmpty())
-                            Toast.makeText(MonthBudget.this,
-                                    "Please enter Date,Rate and select Item other than All before ADD",Toast.LENGTH_SHORT).show();
-                        else
-                        db.Add(editName.getText().toString(),
-                                editSurname.getSelectedItem().toString(),
-                                editMarks.getText().toString(),MonthBudget.this);
-                       /* boolean isInserted=false;
-                        if(!editName.getText().toString().equals("")& !editSurname.getSelectedItem().toString().equals("")&
-                                !editMarks.getText().toString().equals(""))
-                        {
-                            isInserted = myDb.insertData(editName.getText().toString(),
-                                    editSurname.getSelectedItem().toString(),
-                                    editMarks.getText().toString());
-
-                        }
-                        else Toast.makeText(MonthBudget.this,
-                                "Enter Date,Item, Rate and then Press Create Button",Toast.LENGTH_SHORT).show();
-                        if(isInserted == true)
-                            Toast.makeText(MonthBudget.this,"Data Inserted",Toast.LENGTH_SHORT).show();*/
                     }
                 }
         );
