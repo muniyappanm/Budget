@@ -119,7 +119,6 @@ public class MonthBudget extends AppCompatActivity
                      ) {
                     db.delete(i,MonthBudget.this);
                 }
-                mExampleItem.clear();
                 View();
 
             }
@@ -166,7 +165,6 @@ public class MonthBudget extends AppCompatActivity
                      c.add(Calendar.DAY_OF_MONTH, -1);
                      String newDate = sdf.format(c.getTime());
                      Date1.setText(newDate);
-                     mExampleItem.clear();
                      View();
 
                  }
@@ -190,7 +188,6 @@ public class MonthBudget extends AppCompatActivity
 
                         c.add(Calendar.DAY_OF_MONTH, 1);
                         String newDate = sdf.format(c.getTime());
-                        mExampleItem.clear();
                         Date1.setText(newDate);
                         View();
 
@@ -214,7 +211,6 @@ public class MonthBudget extends AppCompatActivity
                                 if (M.length() == 1)
                                     M = "0" + M;
                                 Date1.setText(DOM + "-" + M + "-" + year);
-                                mExampleItem.clear();
                                 View();
                                 Log.d("Document:", "Month is:" + M);
 
@@ -238,19 +234,29 @@ public class MonthBudget extends AppCompatActivity
                 db.Add(Date1.getText().toString(),txt1,txt2,MonthBudget.this);
                 mExampleItem.add(new ExampleItem(R.drawable.ic_android, txt1,
                         txt2, R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+                /*mExampleItem.clear();*/
+                /*Task<QuerySnapshot> data1=null;
+                data1=db.View(
+                        Date1.getText().toString(),MonthBudget.this);
+                if(data1.getResult().isEmpty())
+                {
+                    //showMessage("Error","Nothing found");
+                    return;
+                }
                 mExampleItem.clear();
-                View();
-               data.putExtra("text1","default");
-                data.putExtra("text2","default");
+                for (QueryDocumentSnapshot Qdoc:data1.getResult())
+                {
+                    Map<String ,Object> Mlist=null;
+                    Mlist= Qdoc.getData();
+                    mExampleItem.add(new ExampleItem(R.drawable.ic_android, Mlist.get("Item").toString(),
+                            Mlist.get("Rate").toString(), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+                }*/
+
             }
     }
 
-    public  void AddData(String Date,String Item,String Rate)
-    {
-            db.Add(Date,Item,Rate,MonthBudget.this);
-    }
-
     void View(){
+        mExampleItem.clear();
         Task<QuerySnapshot> data=null;
         data=db.View(
                 Date1.getText().toString(),MonthBudget.this);
@@ -268,9 +274,6 @@ public class MonthBudget extends AppCompatActivity
         }
 
 
-    }
-    public void DeleteData() {
-        db.delete(editTextId.getText().toString(),MonthBudget.this);
     }
 
 
