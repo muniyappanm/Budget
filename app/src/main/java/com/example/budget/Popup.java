@@ -1,9 +1,11 @@
 package com.example.budget;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,14 +25,23 @@ public class Popup extends AppCompatActivity {
         mTextView1 = findViewById(R.id.editText_item);
         mTextView2 = findViewById(R.id.editText_rate);
         floatingActionButton=findViewById(R.id.add);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        Add();
+    }
+    private void Add(){
+        floatingActionButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
-                Intent in =new Intent();
-                in.putExtra("text1",
-                        mTextView1.getText().toString()).putExtra("text2",mTextView2.getText().toString());
-                setResult(RESULT_OK,in);
-                finish();
+                if( mTextView1.getText().toString().isEmpty()||mTextView2.getText().toString().isEmpty())
+                    Toast.makeText(Popup.this,
+                            "Empty Data not alloweded",Toast.LENGTH_SHORT).show();
+                else {
+                    Intent in = new Intent();
+                    in.putExtra("text1",
+                            mTextView1.getText().toString()).putExtra("text2", mTextView2.getText().toString());
+                    setResult(RESULT_OK, in);
+                    finish();
+                }
             }
         });
     }

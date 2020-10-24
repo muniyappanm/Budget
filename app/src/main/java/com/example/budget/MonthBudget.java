@@ -3,9 +3,11 @@ package com.example.budget;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,14 +53,26 @@ public class MonthBudget extends AppCompatActivity
     int yyyy=c.get(Calendar.YEAR);
     int mm=c.get(Calendar.MONTH);
     int dd=c.get(Calendar.DAY_OF_MONTH);
-    TextView Date1;
+      TextView Date1;
+    ImageView LeftDate,RightDate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monthbudget);
-        createExampleList();
-        buildRecyclerView();
+        Date1=findViewById(R.id.textView_date);
         floatingActionButton=findViewById(R.id.fab);
+        buildRecyclerView();
+        String date_n = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        Date1.setText(date_n);
+        PopUp();
+        View();
+        LeftDate=(ImageView)findViewById(R.id.leftdate);
+        RightDate=(ImageView)findViewById(R.id.rightdate);
+        onleftDate();
+        onRightDate();
+        onSetDate();
+    }
+    private void PopUp(){
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,46 +80,48 @@ public class MonthBudget extends AppCompatActivity
                 startActivityForResult(in,1);
             }
         });
-        String date_n = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-        Date1 = (TextView)findViewById(R.id.textView_date);
-        Date1.setText(date_n);
+
     }
-    public void insertItem(int position, String txt1, String txt2) {
-        mExampleItem.add(new ExampleItem(R.drawable.ic_android,
-                txt1, txt2,
-                R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
-    }
-    public void removeItem(int position) {
-        mExampleItem.remove(position);
-        mAdapter.notifyItemRemoved(position);
-    }
+
     public void changeItem(int position, String text1,String text2) {
         mExampleItem.get(position).changeText1(text1,text2);
         mAdapter.notifyItemChanged(position);
-    }
-
-    public void createExampleList() {
-        mExampleItem.add(new ExampleItem(R.drawable.ic_android, "Line muniyappan muni", "Line 2",
-                R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
-        mExampleItem.add(new ExampleItem(R.drawable.ic_audio, "Line 3", "Line 4",
-                R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
-        mExampleItem.add(new ExampleItem(R.drawable.ic_sun, "Line 5", "Line 6",
-                R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
     }
     public void buildRecyclerView() {
         mRecyclerView=findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager=new LinearLayoutManager(this);
         mAdapter=new ExampleAdapter(mExampleItem);
-
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new ExampleAdapter.OnItemClickListener()
         {
             @Override
-            public void onItemDelete(int position) {
+            public void onItemDelete(int position, ImageView edit, ImageView delete, ImageView ok, EditText mTextView1,
+                                     EditText mTextView2) {
                 mExampleItem.remove(position);
                 mAdapter.notifyItemRemoved(position);
+                Task<QuerySnapshot> data=db.View(
+                        Date1.getText().toString(),mTextView1.getText().toString()
+                        ,mTextView2.getText().toString(),MonthBudget.this);
+                if(data.getResult().isEmpty())
+                {
+                    //showMessage("Error","Nothing found");
+                    return;
+                }
+                List<String> list = new ArrayList<String>();
+                for (QueryDocumentSnapshot Qdoc:data.getResult())
+                {
+                    Map<String ,Object> Mlist= Qdoc.getData();
+                    list.add(Mlist.get("count").toString());
+                }
+                for (String i:list
+                     ) {
+                    db.delete(i,MonthBudget.this);
+                }
+                mExampleItem.clear();
+                View();
+
             }
 
             @Override
@@ -130,8 +147,85 @@ public class MonthBudget extends AppCompatActivity
             }
         });
 
-
     }
+            public void onleftDate() {
+             LeftDate.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     String oldDate =Date1.getText().toString();
+                     //Specifying date format that matches the given date
+                     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                     Calendar c = Calendar.getInstance();
+                     try{
+                         //Setting the date to the given date
+                         c.setTime(sdf.parse(oldDate));
+                     }catch(ParseException e){
+                         e.printStackTrace();
+                     }
+
+                     c.add(Calendar.DAY_OF_MONTH, -1);
+                     String newDate = sdf.format(c.getTime());
+                     Date1.setText(newDate);
+                     mExampleItem.clear();
+                     View();
+
+                 }
+             });
+
+            }
+            public void onRightDate() {
+                RightDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String oldDate =Date1.getText().toString();
+                        //Specifying date format that matches the given date
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                        Calendar c = Calendar.getInstance();
+                        try{
+                            //Setting the date to the given date
+                            c.setTime(sdf.parse(oldDate));
+                        }catch(ParseException e){
+                            e.printStackTrace();
+                        }
+
+                        c.add(Calendar.DAY_OF_MONTH, 1);
+                        String newDate = sdf.format(c.getTime());
+                        mExampleItem.clear();
+                        Date1.setText(newDate);
+                        View();
+
+                    }
+                });
+
+            }
+            public void onSetDate() {
+        Date1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePickerDialog = new DatePickerDialog(MonthBudget.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                month += 1;
+                                String DOM = "" + dayOfMonth;
+                                if (DOM.length() == 1)
+                                    DOM = "0" + DOM;
+                                String M = "" + month;
+                                if (M.length() == 1)
+                                    M = "0" + M;
+                                Date1.setText(DOM + "-" + M + "-" + year);
+                                mExampleItem.clear();
+                                View();
+                                Log.d("Document:", "Month is:" + M);
+
+                            }
+                        }, yyyy, mm, dd);
+                datePickerDialog.show();
+
+            }
+        });
+
+            }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -141,40 +235,42 @@ public class MonthBudget extends AppCompatActivity
             {
                 String txt1=data.getStringExtra("text1");
                 String txt2=data.getStringExtra("text2");
-                insertItem(1,txt1,txt2);
-
+                db.Add(Date1.getText().toString(),txt1,txt2,MonthBudget.this);
+                mExampleItem.add(new ExampleItem(R.drawable.ic_android, txt1,
+                        txt2, R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+                mExampleItem.clear();
+                View();
+               data.putExtra("text1","default");
+                data.putExtra("text2","default");
             }
     }
 
-    public  void AddData() {
-        btnAddData.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(editName.getText().toString().isEmpty()||
-                                editSurname.getSelectedItem().toString().equals("All")||editMarks.getText().toString().isEmpty())
-                            Toast.makeText(MonthBudget.this,
-                                    "Please enter Date,Rate and select Item other than All before ADD",Toast.LENGTH_SHORT).show();
-                        else
-                            db.Add(editName.getText().toString(),
-                                    editSurname.getSelectedItem().toString(),
-                                    editMarks.getText().toString(),MonthBudget.this);
-                       /* boolean isInserted=false;
-                        if(!editName.getText().toString().equals("")& !editSurname.getSelectedItem().toString().equals("")&
-                                !editMarks.getText().toString().equals(""))
-                        {
-                            isInserted = myDb.insertData(editName.getText().toString(),
-                                    editSurname.getSelectedItem().toString(),
-                                    editMarks.getText().toString());
+    public  void AddData(String Date,String Item,String Rate)
+    {
+            db.Add(Date,Item,Rate,MonthBudget.this);
+    }
 
-                        }
-                        else Toast.makeText(MonthBudget.this,
-                                "Enter Date,Item, Rate and then Press Create Button",Toast.LENGTH_SHORT).show();
-                        if(isInserted == true)
-                            Toast.makeText(MonthBudget.this,"Data Inserted",Toast.LENGTH_SHORT).show();*/
-                    }
-                }
-        );
+    void View(){
+        Task<QuerySnapshot> data=null;
+        data=db.View(
+                Date1.getText().toString(),MonthBudget.this);
+        if(data.getResult().isEmpty())
+        {
+            //showMessage("Error","Nothing found");
+            return;
+        }
+        for (QueryDocumentSnapshot Qdoc:data.getResult())
+        {
+            Map<String ,Object> Mlist=null;
+            Mlist= Qdoc.getData();
+            mExampleItem.add(new ExampleItem(R.drawable.ic_android, Mlist.get("Item").toString(),
+                    Mlist.get("Rate").toString(), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+        }
+
+
+    }
+    public void DeleteData() {
+        db.delete(editTextId.getText().toString(),MonthBudget.this);
     }
 
 
@@ -285,7 +381,7 @@ public class MonthBudget extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                Task<QuerySnapshot> data=db.View( editName.getText().toString(),
+                Task<QuerySnapshot> data=db.View(
                         editSurname.getSelectedItem().toString(),MonthBudget.this);
                 if(data.getResult().isEmpty())
                 {
@@ -313,7 +409,7 @@ public class MonthBudget extends AppCompatActivity
         });
     }
 
-    public void DeleteData() {
+  /*  public void DeleteData() {
         btnDelete.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -321,15 +417,15 @@ public class MonthBudget extends AppCompatActivity
                         if(editTextId.getText().toString().isEmpty())
                             Toast.makeText(MonthBudget.this,"Please enter ID to Delete",Toast.LENGTH_SHORT).show();
                         else db.delete(editTextId.getText().toString(),MonthBudget.this);
-                       /*  myDb.deleteData(editTextId.getText().toString(),MonthBudget.this);
+                       *//*  myDb.deleteData(editTextId.getText().toString(),MonthBudget.this);
                        if(deletedRows > 0)
                             Toast.makeText(MonthBudget.this,"Data Deleted",Toast.LENGTH_SHORT).show();
                         else
-                            Toast.makeText(MonthBudget.this,"Data not Deleted",Toast.LENGTH_SHORT).show();*/
+                            Toast.makeText(MonthBudget.this,"Data not Deleted",Toast.LENGTH_SHORT).show();*//*
                     }
                 }
         );
-    }
+    }*/
     public void UpdateData() {
         btnviewUpdate.setOnClickListener(
                 new View.OnClickListener() {
@@ -354,7 +450,7 @@ public class MonthBudget extends AppCompatActivity
         );
     }
 
-    public void viewAll() {
+    /*public void viewAll() {
         btnviewAll.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -374,7 +470,7 @@ public class MonthBudget extends AppCompatActivity
                                     "__"+Mlist.get("Item").toString()+"__"+Mlist.get("Rate").toString());
                         }
 
-                       /* Cursor res = myDb.getAllData();
+                       *//* Cursor res = myDb.getAllData();
                        if(res.getCount() == 0) {
                             // show message
                             showMessage("Error","Nothing found");
@@ -385,7 +481,7 @@ public class MonthBudget extends AppCompatActivity
                             list.add(res.getString(0)+"__"+res.getString(1)+"__"+
                                     res.getString(2)+"__"+res.getString(3));
 
-                        }*/
+                        }*//*
                         // Show all data
                         String[] items=list.toArray(new String[0]);
                         // Navigate to ViewPage with Parameter items String Array.
@@ -395,7 +491,7 @@ public class MonthBudget extends AppCompatActivity
                     }
 
                 });
-    }
+    }*/
 
     public void showMessage(String title,String Message){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

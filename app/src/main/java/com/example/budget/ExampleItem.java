@@ -41,4 +41,6 @@ public class ExampleItem {
     public String getText2() {
         return mText2;
     }
+
 }
+

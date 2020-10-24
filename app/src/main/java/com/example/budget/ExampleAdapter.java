@@ -14,18 +14,21 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 
+
 public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleViewHolder> {
-    MainActivity mainActivity = new MainActivity();
     private ArrayList<ExampleItem> mExampleList;
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
-        void onItemDelete(int position);
+        void onItemDelete(int position, ImageView edit, ImageView delete,
+                          ImageView ok, EditText mTextView1, EditText mTextView2);
 
-        void onItemEdit(int position, ImageView edit, ImageView delete, ImageView ok, EditText mTextView1, EditText mTextView2);
+        void onItemEdit(int position, ImageView edit, ImageView delete, ImageView ok,
+                        EditText mTextView1, EditText mTextView2 );
 
         void onItemOk(int position, ImageView edit, ImageView delete, ImageView ok, EditText mTextView1, EditText mTextView2);
     }
+
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         mListener = listener;
@@ -38,6 +41,8 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
         public ImageView edit;
         public ImageView delete;
         public ImageView ok;
+        public ImageView left,right;
+        public TextView setDate;
 
         public ExampleViewHolder(View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -47,6 +52,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
             edit = itemView.findViewById(R.id.fabedit);
             delete = itemView.findViewById(R.id.fabdelete);
             ok = itemView.findViewById(R.id.fabok);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -61,7 +67,7 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
                     if (listener != null) {
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemDelete(position);
+                            listener.onItemDelete(position, edit, delete, ok, mTextView1, mTextView2);
                         }
                     }
                 }
@@ -107,7 +113,6 @@ public class ExampleAdapter extends RecyclerView.Adapter<ExampleAdapter.ExampleV
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
         ExampleItem currentItem = mExampleList.get(position);
-
         holder.mImageView.setImageResource(currentItem.getImageResource());
         holder.mTextView1.setText(currentItem.getText1());
         holder.mTextView1.setEnabled(false);
