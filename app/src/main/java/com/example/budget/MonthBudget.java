@@ -1,6 +1,7 @@
 package com.example.budget;
 
 import android.app.AlertDialog;
+import android.app.AsyncNotedAppOp;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
 
 public class MonthBudget extends AppCompatActivity 
 {
@@ -55,22 +58,33 @@ public class MonthBudget extends AppCompatActivity
     int dd=c.get(Calendar.DAY_OF_MONTH);
       TextView Date1;
     ImageView LeftDate,RightDate;
+    TextView item,rate;
+    EditText ItemText,RateText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monthbudget);
         Date1=findViewById(R.id.textView_date);
         floatingActionButton=findViewById(R.id.fab);
+        item=(TextView) findViewById(R.id.textView_item);
+        rate=(TextView) findViewById(R.id.textView_Rate);
+        ItemText=(EditText)findViewById(R.id.editText_item);
+        RateText=(EditText)findViewById(R.id.editText_rate);
         buildRecyclerView();
         String date_n = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         Date1.setText(date_n);
         PopUp();
-        View();
         LeftDate=(ImageView)findViewById(R.id.leftdate);
         RightDate=(ImageView)findViewById(R.id.rightdate);
         onleftDate();
         onRightDate();
         onSetDate();
+    }
+// to initialise data from firestore.
+    @Override
+    protected void onStart() {
+        super.onStart();
+        View();
     }
     private void PopUp(){
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +96,6 @@ public class MonthBudget extends AppCompatActivity
         });
 
     }
-
     public void changeItem(int position, String text1,String text2) {
         mExampleItem.get(position).changeText1(text1,text2);
         mAdapter.notifyItemChanged(position);
@@ -151,6 +164,8 @@ public class MonthBudget extends AppCompatActivity
              LeftDate.setOnClickListener(new View.OnClickListener() {
                  @Override
                  public void onClick(View v) {
+                      mExampleItem.clear();
+                     mRecyclerView.setLayoutManager(null);
                      String oldDate =Date1.getText().toString();
                      //Specifying date format that matches the given date
                      SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -172,6 +187,8 @@ public class MonthBudget extends AppCompatActivity
 
             }
             public void onRightDate() {
+                mExampleItem.clear();
+                mRecyclerView.setLayoutManager(null);
                 RightDate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -185,7 +202,6 @@ public class MonthBudget extends AppCompatActivity
                         }catch(ParseException e){
                             e.printStackTrace();
                         }
-
                         c.add(Calendar.DAY_OF_MONTH, 1);
                         String newDate = sdf.format(c.getTime());
                         Date1.setText(newDate);
@@ -199,6 +215,8 @@ public class MonthBudget extends AppCompatActivity
         Date1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mExampleItem.clear();
+                mRecyclerView.setLayoutManager(null);
                 datePickerDialog = new DatePickerDialog(MonthBudget.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -211,52 +229,33 @@ public class MonthBudget extends AppCompatActivity
                                 if (M.length() == 1)
                                     M = "0" + M;
                                 Date1.setText(DOM + "-" + M + "-" + year);
-                                View();
                                 Log.d("Document:", "Month is:" + M);
 
                             }
                         }, yyyy, mm, dd);
                 datePickerDialog.show();
-
+                View();
             }
         });
 
             }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1)
             if(resultCode==RESULT_OK)
             {
-                String txt1=data.getStringExtra("text1");
-                String txt2=data.getStringExtra("text2");
-                db.Add(Date1.getText().toString(),txt1,txt2,MonthBudget.this);
-                mExampleItem.add(new ExampleItem(R.drawable.ic_android, txt1,
-                        txt2, R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
-                /*mExampleItem.clear();*/
-                /*Task<QuerySnapshot> data1=null;
-                data1=db.View(
-                        Date1.getText().toString(),MonthBudget.this);
-                if(data1.getResult().isEmpty())
-                {
-                    //showMessage("Error","Nothing found");
-                    return;
-                }
-                mExampleItem.clear();
-                for (QueryDocumentSnapshot Qdoc:data1.getResult())
-                {
-                    Map<String ,Object> Mlist=null;
-                    Mlist= Qdoc.getData();
-                    mExampleItem.add(new ExampleItem(R.drawable.ic_android, Mlist.get("Item").toString(),
-                            Mlist.get("Rate").toString(), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
-                }*/
+                buildRecyclerView();
+                mExampleItem.add(new ExampleItem(R.drawable.ic_android, data.getStringExtra("text1"),
+                        data.getStringExtra("text2"), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+                db.Add(Date1.getText().toString(), data.getStringExtra("text1"),
+                        data.getStringExtra("text2"),MonthBudget.this);
 
             }
     }
-
     void View(){
         mExampleItem.clear();
+        mRecyclerView.setLayoutManager(null);
         Task<QuerySnapshot> data=null;
         data=db.View(
                 Date1.getText().toString(),MonthBudget.this);
@@ -265,6 +264,7 @@ public class MonthBudget extends AppCompatActivity
             //showMessage("Error","Nothing found");
             return;
         }
+        buildRecyclerView();
         for (QueryDocumentSnapshot Qdoc:data.getResult())
         {
             Map<String ,Object> Mlist=null;
@@ -272,8 +272,7 @@ public class MonthBudget extends AppCompatActivity
             mExampleItem.add(new ExampleItem(R.drawable.ic_android, Mlist.get("Item").toString(),
                     Mlist.get("Rate").toString(), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
         }
-
-
+         data=null;
     }
 
 

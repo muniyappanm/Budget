@@ -52,7 +52,6 @@ public class FireBaseHandler extends AppCompatActivity
                     Log.d("Document", data.get("count").toString());
                     Log.d("Document1", data.toString());
 
-
                 }
                 else
                     Log.d("Document","No Data");
