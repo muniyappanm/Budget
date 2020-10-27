@@ -45,6 +45,7 @@ import java.util.Timer;
 
 public class MonthBudget extends AppCompatActivity 
 {
+    List<String> list = new ArrayList<String>();
     public ArrayList<ExampleItem> mExampleItem=new ArrayList<>();
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
@@ -116,7 +117,7 @@ public class MonthBudget extends AppCompatActivity
                 mAdapter.notifyItemRemoved(position);
                 Task<QuerySnapshot> data=db.View(
                         Date1.getText().toString(),mTextView1.getText().toString()
-                        ,mTextView2.getText().toString(),MonthBudget.this);
+                        ,mTextView2.getText().toString());
                 if(data.getResult().isEmpty())
                 {
                     //showMessage("Error","Nothing found");
@@ -144,7 +145,20 @@ public class MonthBudget extends AppCompatActivity
                 ok.setVisibility(View.VISIBLE);
                 mTextView1.setEnabled(true);
                 mTextView2.setEnabled(true);
-
+                Task<QuerySnapshot> data=db.View(
+                        Date1.getText().toString(),mTextView1.getText().toString()
+                        ,mTextView2.getText().toString());
+                if(data.getResult().isEmpty())
+                {
+                    //showMessage("Error","Nothing found");
+                    return;
+                }
+                for (QueryDocumentSnapshot Qdoc:data.getResult())
+                {
+                    Map<String ,Object> Mlist= Qdoc.getData();
+                    list.add(Mlist.get("count").toString());
+                }
+                Log.d("List.get(0)",list.get(0));
             }
 
             @Override
@@ -152,13 +166,17 @@ public class MonthBudget extends AppCompatActivity
                                  ImageView delete, ImageView ok, EditText mTextView1, EditText mTextView2) {
 
                 changeItem(position,mTextView1.getText().toString(),mTextView2.getText().toString());
+                db.Update(list.get(0),
+                        Date1.getText().toString(),mTextView1.getText().toString()
+                        ,mTextView2.getText().toString(),MonthBudget.this);
                 edit.setVisibility(View.VISIBLE);
                 delete.setVisibility(View.VISIBLE);
                 ok.setVisibility(View.INVISIBLE);
+                mTextView1.setEnabled(false);
+                mTextView2.setEnabled(false);
 
             }
         });
-
     }
             public void onleftDate() {
              LeftDate.setOnClickListener(new View.OnClickListener() {
@@ -212,11 +230,12 @@ public class MonthBudget extends AppCompatActivity
 
             }
             public void onSetDate() {
+                mExampleItem.clear();
+                mRecyclerView.setLayoutManager(null);
         Date1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mExampleItem.clear();
-                mRecyclerView.setLayoutManager(null);
+
                 datePickerDialog = new DatePickerDialog(MonthBudget.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -229,12 +248,13 @@ public class MonthBudget extends AppCompatActivity
                                 if (M.length() == 1)
                                     M = "0" + M;
                                 Date1.setText(DOM + "-" + M + "-" + year);
+                                View();
                                 Log.d("Document:", "Month is:" + M);
 
                             }
                         }, yyyy, mm, dd);
                 datePickerDialog.show();
-                View();
+
             }
         });
 
@@ -246,7 +266,7 @@ public class MonthBudget extends AppCompatActivity
             if(resultCode==RESULT_OK)
             {
                 buildRecyclerView();
-                mExampleItem.add(new ExampleItem(R.drawable.ic_android, data.getStringExtra("text1"),
+                mExampleItem.add(new ExampleItem(R.drawable.ic_money, data.getStringExtra("text1"),
                         data.getStringExtra("text2"), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
                 db.Add(Date1.getText().toString(), data.getStringExtra("text1"),
                         data.getStringExtra("text2"),MonthBudget.this);
@@ -258,7 +278,7 @@ public class MonthBudget extends AppCompatActivity
         mRecyclerView.setLayoutManager(null);
         Task<QuerySnapshot> data=null;
         data=db.View(
-                Date1.getText().toString(),MonthBudget.this);
+                Date1.getText().toString());
         if(data.getResult().isEmpty())
         {
             //showMessage("Error","Nothing found");
@@ -269,12 +289,34 @@ public class MonthBudget extends AppCompatActivity
         {
             Map<String ,Object> Mlist=null;
             Mlist= Qdoc.getData();
-            mExampleItem.add(new ExampleItem(R.drawable.ic_android, Mlist.get("Item").toString(),
+            mExampleItem.add(new ExampleItem(R.drawable.ic_money, Mlist.get("Item").toString(),
                     Mlist.get("Rate").toString(), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
         }
          data=null;
     }
-
+    public void UpdateData() {
+        btnviewUpdate.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(editTextId.getText().toString().isEmpty())
+                            Toast.makeText(MonthBudget.this,"Please enter ID to Update",Toast.LENGTH_SHORT).show();
+                        else if(editSurname.getSelectedItem().toString()=="All")
+                            Toast.makeText(MonthBudget.this,"Please select Item Other than All",Toast.LENGTH_SHORT).show();
+                        else db.Update(editTextId.getText().toString(),
+                                    editName.getText().toString(),
+                                    editSurname.getSelectedItem().toString(),editMarks.getText().toString(),MonthBudget.this);
+                        /*boolean isUpdate = myDb.updateData(editTextId.getText().toString(),
+                                editName.getText().toString(),
+                                editSurname.getSelectedItem().toString(),editMarks.getText().toString());
+                        if(isUpdate == true)
+                            Toast.makeText(MonthBudget.this,"Data Update",Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(MonthBudget.this,"Data not Updated",Toast.LENGTH_SHORT).show();*/
+                    }
+                }
+        );
+    }
 
 
 
@@ -384,7 +426,7 @@ public class MonthBudget extends AppCompatActivity
             public void onClick(View v) {
 
                 Task<QuerySnapshot> data=db.View(
-                        editSurname.getSelectedItem().toString(),MonthBudget.this);
+                        editSurname.getSelectedItem().toString());
                 if(data.getResult().isEmpty())
                 {
                     showMessage("Error","Nothing found");
@@ -428,7 +470,7 @@ public class MonthBudget extends AppCompatActivity
                 }
         );
     }*/
-    public void UpdateData() {
+    /*public void UpdateData() {
         btnviewUpdate.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -440,17 +482,17 @@ public class MonthBudget extends AppCompatActivity
                         else db.Update(editTextId.getText().toString(),
                                 editName.getText().toString(),
                                 editSurname.getSelectedItem().toString(),editMarks.getText().toString(),MonthBudget.this);
-                        /*boolean isUpdate = myDb.updateData(editTextId.getText().toString(),
+                        *//*boolean isUpdate = myDb.updateData(editTextId.getText().toString(),
                                 editName.getText().toString(),
                                 editSurname.getSelectedItem().toString(),editMarks.getText().toString());
                         if(isUpdate == true)
                             Toast.makeText(MonthBudget.this,"Data Update",Toast.LENGTH_SHORT).show();
                         else
-                            Toast.makeText(MonthBudget.this,"Data not Updated",Toast.LENGTH_SHORT).show();*/
+                            Toast.makeText(MonthBudget.this,"Data not Updated",Toast.LENGTH_SHORT).show();*//*
                     }
                 }
         );
-    }
+    }*/
 
     /*public void viewAll() {
         btnviewAll.setOnClickListener(

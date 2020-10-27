@@ -61,7 +61,7 @@ public class FireBaseHandler extends AppCompatActivity
     }
 
 
-    public Task<QuerySnapshot> View(String Date,MonthBudget monthBudget)
+    public Task<QuerySnapshot> View(String Date)
     {
         FirebaseFirestore db=FirebaseFirestore.getInstance();
         Task<QuerySnapshot> doc=null;
@@ -79,7 +79,7 @@ public class FireBaseHandler extends AppCompatActivity
             continue;
         return doc;
     }
-    public Task<QuerySnapshot> View(String Date,String Item,String Rate,MonthBudget monthBudget)
+    public Task<QuerySnapshot> View(String Date,String Item,String Rate)
     {
         FirebaseFirestore db=null;
         db=FirebaseFirestore.getInstance();
@@ -113,12 +113,10 @@ public class FireBaseHandler extends AppCompatActivity
     }
 
     public void Update(String ID, String Date, String Item, String Rate, MonthBudget monthBudget) {
-        DocumentReference doc=FirebaseFirestore.getInstance().collection("Budget").document(user.getUid()).collection("budget").document(ID);
-        if(!Date.isEmpty()&&!Rate.isEmpty()) doc.update("Date",Date,"Item",Item,"Rate",Rate);
-        else if(Date.isEmpty()&&!Rate.isEmpty()) doc.update("Item", Item, "Rate", Rate);
-        else if(!Date.isEmpty()&&Rate.isEmpty()) doc.update("Date", Date, "Item", Item);
-        else doc.update("Item",Item);
-        Toast.makeText(monthBudget,"Data Updated",Toast.LENGTH_SHORT).show();
+        DocumentReference doc=FirebaseFirestore.getInstance().collection("Budget").document(user.getUid()).
+                collection("budget").document(ID);
+        doc.update("Date",Date,"Item",Item,"Rate",Rate);
+        /*Toast.makeText(monthBudget,"Data Updated",Toast.LENGTH_SHORT).show();*/
     }
 
 }

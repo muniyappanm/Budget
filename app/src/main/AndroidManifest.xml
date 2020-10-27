@@ -9,6 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Budget">
+        <activity android:name=".ReportChart"></activity>
+        <activity android:name=".Report" />
+        <activity android:name=".MenuActivity" />
         <activity android:name=".ViewPage" />
         <activity
             android:name=".Popup"
