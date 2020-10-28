@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +60,48 @@ public class FireBaseHandler extends AppCompatActivity
         });
 
     }
+    public void AddItem(String Item)
+    {
+              FirebaseFirestore db=FirebaseFirestore.getInstance();
+             DocumentReference doc=FirebaseFirestore.getInstance().collection("Budget").
+                document(user.getUid()).collection("Counter")
+                .document("Itemcount");
+            doc.update("itemcount",FieldValue.increment(1));
+        Map<String ,Object> data= new HashMap<>();
+         doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot m=task.getResult();
+                data.put("Item"+m.getLong("itemcount").toString(),Item);
+                db.collection("Budget").document(user.getUid()).collection("Itemlist").
+                        document("itemlist").set(data, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                            Log.d("Document", "ok");
+                    }
+                });
 
+            }
+        });
+    }
+    public Task<QuerySnapshot> View()
+    {
+        FirebaseFirestore db=FirebaseFirestore.getInstance();
+        Task<QuerySnapshot> doc=null;
+        Map<String ,Object> data= new HashMap<>();
+        doc= FirebaseFirestore.getInstance().collection("Budget").
+                document(user.getUid()).collection("Itemlist").
+                        get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d("Document", "ok");
+                    }
+                });
+        while (!doc.isComplete())
+            continue;
+        return doc;
+    }
 
     public Task<QuerySnapshot> View(String Date)
     {
@@ -112,10 +154,10 @@ public class FireBaseHandler extends AppCompatActivity
         });
     }
 
-    public void Update(String ID, String Date, String Item, String Rate, MonthBudget monthBudget) {
+    public void Update(String ID, String Date, String Rate, MonthBudget monthBudget) {
         DocumentReference doc=FirebaseFirestore.getInstance().collection("Budget").document(user.getUid()).
                 collection("budget").document(ID);
-        doc.update("Date",Date,"Item",Item,"Rate",Rate);
+        doc.update("Date",Date,"Rate",Rate);
         /*Toast.makeText(monthBudget,"Data Updated",Toast.LENGTH_SHORT).show();*/
     }
 

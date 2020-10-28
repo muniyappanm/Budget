@@ -45,5 +45,35 @@
         android:textSize="40dp"
         android:text="Loading...."
         android:visibility="invisible"/>
+    <TextView
+        android:id="@+id/additem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_below="@id/button_logout"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:text="Add Item" />
+    <EditText
+        android:id="@+id/add"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginLeft="100dp"
+        android:layout_below="@id/additem"
+        android:background="@drawable/edit_round"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:id="@+id/button_additem"
+        android:layout_width="200dp"
+        android:layout_below="@id/add"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="10dp"
+        android:text="Add" />
 
 </RelativeLayout>

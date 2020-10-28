@@ -21,8 +21,8 @@
         android:text="Rate"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/editText_item"
+    <Spinner
+        android:id="@+id/spinner_item"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_toEndOf="@id/textView"
