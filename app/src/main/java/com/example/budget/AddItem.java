@@ -29,7 +29,7 @@ public class AddItem extends AppCompatActivity {
                 else {
                     db.AddItem(item.getText().toString());
                     item.setText("");
-                    startActivity(new Intent(AddItem.this,MenuActivity.class));
+                    Toast.makeText(AddItem.this,"Item Added Successfully",Toast.LENGTH_SHORT).show();
                 }
             }
         });

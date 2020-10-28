@@ -22,8 +22,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Report extends AppCompatActivity {
-    EditText from,to;
-    Calendar c,d;
+    TextView from,to;
     TextView loading_graph,To,customreport;
     Button btn;
     DatePickerDialog datePickerDialog;
@@ -31,44 +30,20 @@ public class Report extends AppCompatActivity {
     int yyyy=e.get(Calendar.YEAR);
     int mm=e.get(Calendar.MONTH);
     int dd=e.get(Calendar.DAY_OF_MONTH);
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loading_graph.setVisibility(View.INVISIBLE);
-        btn.setVisibility(View.VISIBLE);
-        from.setVisibility(View.VISIBLE);
-        to.setVisibility(View.VISIBLE);
-        To.setVisibility(View.VISIBLE);
-        customreport.setVisibility(View.VISIBLE);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         setTitle("Report");
         String date_n = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-        from=(EditText)findViewById(R.id.fromdate);
-        to=(EditText)findViewById(R.id.todate);
+        from=(TextView)findViewById(R.id.fromdate);
+        to=(TextView)findViewById(R.id.todate);
         btn=(Button)findViewById(R.id.viewreport);
         loading_graph=(TextView)findViewById(R.id.loading_graph);
         To=(TextView)findViewById(R.id.to);
         customreport=(TextView)findViewById(R.id.textView);
         from.setText(date_n);
         to.setText(date_n);
-        Date fromdate = null,todate = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        c = Calendar.getInstance();
-        d = Calendar.getInstance();
-        try{
-            //Setting the date to the given date
-            c.setTime(sdf.parse(from.getText().toString()));
-            d.setTime(sdf.parse(to.getText().toString()));
-        }catch(ParseException e){
-            e.printStackTrace();
-        }
-
         from.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +90,17 @@ public class Report extends AppCompatActivity {
         });
         Graph();
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        btn.setVisibility(View.VISIBLE);
+        from.setVisibility(View.VISIBLE);
+        to.setVisibility(View.VISIBLE);
+        To.setVisibility(View.VISIBLE);
+        customreport.setVisibility(View.VISIBLE);
+        loading_graph.setVisibility(View.INVISIBLE);
+    }
+
     private void Graph() {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -57,7 +57,7 @@ public class MonthBudget extends AppCompatActivity
     int yyyy=c.get(Calendar.YEAR);
     int mm=c.get(Calendar.MONTH);
     int dd=c.get(Calendar.DAY_OF_MONTH);
-      TextView Date1;
+      TextView Date1,Total;
     ImageView LeftDate,RightDate;
     TextView item,rate;
     EditText ItemText,RateText;
@@ -67,6 +67,7 @@ public class MonthBudget extends AppCompatActivity
         setTitle("Expenditure");
         setContentView(R.layout.activity_monthbudget);
         Date1=findViewById(R.id.textView_date);
+        Total=findViewById(R.id.textView_total);
         floatingActionButton=findViewById(R.id.fab);
         item=(TextView) findViewById(R.id.textView_item);
         rate=(TextView) findViewById(R.id.textView_Rate);
@@ -134,6 +135,7 @@ public class MonthBudget extends AppCompatActivity
                      ) {
                     db.delete(i,MonthBudget.this);
                 }
+                Total.setText("0");
                 View();
 
             }
@@ -174,6 +176,8 @@ public class MonthBudget extends AppCompatActivity
                 ok.setVisibility(View.INVISIBLE);
                 mTextView1.setEnabled(false);
                 mTextView2.setEnabled(false);
+                Total.setText("0");
+                View();
 
             }
         });
@@ -198,6 +202,7 @@ public class MonthBudget extends AppCompatActivity
                      c.add(Calendar.DAY_OF_MONTH, -1);
                      String newDate = sdf.format(c.getTime());
                      Date1.setText(newDate);
+                     Total.setText("0");
                      View();
 
                  }
@@ -223,6 +228,7 @@ public class MonthBudget extends AppCompatActivity
                         c.add(Calendar.DAY_OF_MONTH, 1);
                         String newDate = sdf.format(c.getTime());
                         Date1.setText(newDate);
+                        Total.setText("0");
                         View();
 
                     }
@@ -248,6 +254,7 @@ public class MonthBudget extends AppCompatActivity
                                 if (M.length() == 1)
                                     M = "0" + M;
                                 Date1.setText(DOM + "-" + M + "-" + year);
+                                Total.setText("0");
                                 View();
                                 Log.d("Document:", "Month is:" + M);
 
@@ -268,9 +275,10 @@ public class MonthBudget extends AppCompatActivity
                 buildRecyclerView();
                 mExampleItem.add(new ExampleItem(R.drawable.ic_money, data.getStringExtra("text1"),
                         data.getStringExtra("text2"), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+                int i=Integer.parseInt(Total.getText().toString())+Integer.parseInt(data.getStringExtra("text2"));
+                Total.setText(""+i);
                 db.Add(Date1.getText().toString(), data.getStringExtra("text1"),
                         data.getStringExtra("text2"),MonthBudget.this);
-
             }
     }
     void View(){
@@ -285,13 +293,16 @@ public class MonthBudget extends AppCompatActivity
             return;
         }
         buildRecyclerView();
+        int i=0;
         for (QueryDocumentSnapshot Qdoc:data.getResult())
         {
             Map<String ,Object> Mlist=null;
             Mlist= Qdoc.getData();
             mExampleItem.add(new ExampleItem(R.drawable.ic_money, Mlist.get("Item").toString(),
                     Mlist.get("Rate").toString(), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+            i+=Integer.parseInt(Mlist.get("Rate").toString());
         }
+        Total.setText(""+i);
          data=null;
     }
 

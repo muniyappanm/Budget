@@ -60,22 +60,35 @@ public class Register extends AppCompatActivity
             {
                 if(task.isSuccessful()) {
                     Map<String ,Object> data= new HashMap<>();
+                    Map<String ,Object> itemcounter= new HashMap<>();
                     data.put("count",0);
+                    itemcounter.put("itemcount",0);
                     FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
                     assert user != null;
                     FirebaseFirestore db=FirebaseFirestore.getInstance();
-                    db.collection("Budget").document(user.getUid()).collection("Counter")
-                            .document("Counter").set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    db.collection("Budget").
+                            document(user.getUid()).collection("Counter")
+                            .document("Itemcount").set(itemcounter).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful())
                             {
-                                Toast.makeText(Register.this, "Register Successful", Toast.LENGTH_SHORT).show();
-                                Intent in = new Intent(Register.this, MainActivity.class);
-                                startActivity(in);
+                                db.collection("Budget").document(user.getUid()).collection("Counter")
+                                        .document("Counter").set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful())
+                                        {
+                                            Toast.makeText(Register.this, "Register Successful", Toast.LENGTH_SHORT).show();
+                                            Intent in = new Intent(Register.this, MainActivity.class);
+                                            startActivity(in);
+                                        }
+                                    }
+                                });
                             }
                         }
                     });
+
                 }
                 else
                     Toast.makeText(Register.this, "Register Failed... Try Again and make sure internet connected", Toast.LENGTH_SHORT).show();

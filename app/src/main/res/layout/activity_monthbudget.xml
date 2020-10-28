@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/darker_gray"
         android:padding="4dp"
-        android:layout_below="@id/textView_date"
+        android:layout_below="@id/textView_total"
         android:scrollbars="vertical" />
 
     <TextView
@@ -23,6 +23,27 @@
         android:layout_marginTop="0dp"
         android:gravity="center_vertical"
         android:text="Date"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/textView_tota"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center_vertical"
+        android:layout_below="@id/textView_date"
+        android:text="Total: Rs "
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginLeft="100dp" />
+    <TextView
+        android:id="@+id/textView_total"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center_vertical"
+        android:layout_toRightOf="@id/textView_tota"
+        android:layout_below="@id/textView_date"
+        android:text="0"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

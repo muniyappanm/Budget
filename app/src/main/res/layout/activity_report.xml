@@ -18,7 +18,7 @@
         android:text="Custom Report"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
+    <TextView
         android:id="@+id/fromdate"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
@@ -27,7 +27,9 @@
         android:ems="5"
         android:background="@drawable/edit_round"
         android:layout_below="@+id/textView"
-        android:inputType="date"></EditText>
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:inputType="date"/>
     <TextView
         android:id="@+id/to"
         android:layout_width="wrap_content"
@@ -37,7 +39,7 @@
         android:layout_toRightOf="@id/fromdate"
         android:text="to"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-    <EditText
+    <TextView
         android:id="@+id/todate"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
@@ -49,7 +51,9 @@
         android:background="@drawable/edit_round"
         android:layout_below="@+id/textView"
         android:layout_toRightOf="@id/fromdate"
-        android:inputType="date"></EditText>
+        android:textStyle="bold"
+        android:inputType="date"
+        android:gravity="center_vertical"></TextView>
     <Button
         android:id="@+id/viewreport"
         android:layout_width="wrap_content"

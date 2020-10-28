@@ -68,9 +68,15 @@ public class ReportChart extends AppCompatActivity {
         Datestring.add(from);
         int i=0;
        do {
+           if(i>32){
+               Toast.makeText(ReportChart.this,"Max 31 day allowedwd OR To date can't be before From Date"
+                       ,Toast.LENGTH_LONG).show();
+               startActivity(new Intent(ReportChart.this,Report.class));
+               break;
+
+           }
             Datestring.add(GetAddedDate(Datestring.get(i)));
             monthDateReports.add(new MonthDateReport(Datestring.get(i),Rate(Datestring.get(i))));
-            Log.d("Datestring.get(i)",Datestring.get(i)+"="+Rate(Datestring.get(i)));
             i++;
         } while (!to.equals(Datestring.get(i-1)));
         
