@@ -12,14 +12,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity {
-    Button expenditure,report;
+    Button expenditure,report,help,contact;
     TextView loading;
+    ImageView picture;
     FireBaseHandler db=new FireBaseHandler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +30,35 @@ public class MenuActivity extends AppCompatActivity {
         expenditure=(Button)findViewById(R.id.button_expenditure);
         report=(Button)findViewById(R.id.button_report);
         loading=(TextView)findViewById(R.id.loading);
+        picture=findViewById(R.id.budget_imageview);
+        help=findViewById(R.id.button_help);
+        contact=findViewById(R.id.button_contact);
         Expenditure();
         Report();
+        Help();
+        Contact();
     }
+
+    private void Contact() {
+        contact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this,Contact.class));
+
+            }
+        });
+    }
+
+    private void Help() {
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this,Help.class));
+
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -61,6 +89,9 @@ public class MenuActivity extends AppCompatActivity {
         super.onStart();
         expenditure.setVisibility(View.VISIBLE);
         report.setVisibility(View.VISIBLE);
+        picture.setVisibility(View.VISIBLE);
+        help.setVisibility(View.VISIBLE);
+        contact.setVisibility(View.VISIBLE);
         loading.setVisibility(View.INVISIBLE);
     }
 
@@ -72,6 +103,9 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(in);
                 expenditure.setVisibility(View.INVISIBLE);
                 report.setVisibility(View.INVISIBLE);
+                picture.setVisibility(View.INVISIBLE);
+                help.setVisibility(View.INVISIBLE);
+                contact.setVisibility(View.INVISIBLE);
                 loading.setVisibility(View.VISIBLE);
             }
         });
