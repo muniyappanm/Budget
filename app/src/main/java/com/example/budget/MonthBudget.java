@@ -87,6 +87,7 @@ public class MonthBudget extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        overridePendingTransition(0, 0);
         View();
     }
     private void PopUp(){
