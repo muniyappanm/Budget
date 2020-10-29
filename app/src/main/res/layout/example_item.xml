@@ -51,6 +51,7 @@
             android:background="@drawable/edit_round"
             android:ems="6"
             android:text="Line 2"
+            android:inputType="number"
             android:textSize="20sp" />
 
         <ImageView

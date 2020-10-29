@@ -3,18 +3,6 @@
 <resources>
 
     <string name="app_name">Budget</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string-array name="Item_array">
-        <item>kitchen Item</item>
-        <item>Fruits</item>
-        <item>Sweet</item>
-        <item>Dress</item>
-        <item>Petrol</item>
-        <item>Personal Care</item>
-        <item>Others</item>
-        <item>All</item>
-    </string-array>
     <string name="title_activity_help">ScrollingActivity</string>
     <string name="large_text">
         "Budget.\n\n"

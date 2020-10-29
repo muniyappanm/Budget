@@ -20,7 +20,6 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
         android:gravity="center_vertical"
         android:text="Date"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -28,13 +27,13 @@
         android:id="@+id/textView_tota"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginStart="100dp"
         android:layout_marginTop="0dp"
         android:gravity="center_vertical"
         android:layout_below="@id/textView_date"
-        android:text="Total: Rs "
+        android:layout_marginStart="30dp"
+        android:text="Day's Total Expense: Rs "
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_marginLeft="100dp" />
+        android:layout_marginLeft="30dp" />
     <TextView
         android:id="@+id/textView_total"
         android:layout_width="wrap_content"
@@ -108,5 +107,13 @@
         android:layout_marginBottom="50dp"
         android:layout_toLeftOf="@id/textView_date"
         android:foreground="@drawable/ic_baseline_arrow_back_ios_24" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_below="@id/textView_date"
+        android:background="@android:color/darker_gray"
+        android:layout_marginLeft="1dp" />
 
 </RelativeLayout>
