@@ -1,4 +1,4 @@
-package com.example.budget;
+package com.example.BudgetDatabase;
 
 public class MonthDateReport {
     String month;

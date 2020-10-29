@@ -1,7 +1,6 @@
-package com.example.budget;
+package com.example.BudgetDatabase;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package com.example.budget;
+package com.example.BudgetDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 

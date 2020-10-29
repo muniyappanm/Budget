@@ -1,4 +1,4 @@
-package com.example.budget;
+package com.example.BudgetDatabase;
 public class ExampleItem {
     private int mImageResource,medit,mdelete,mok;
     private String mText1;

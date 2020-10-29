@@ -1,13 +1,10 @@
-package com.example.budget;
+package com.example.BudgetDatabase;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
-
-import static android.widget.Toast.*;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Budget.db";

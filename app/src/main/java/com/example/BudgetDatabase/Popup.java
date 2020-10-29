@@ -1,7 +1,6 @@
-package com.example.budget;
+package com.example.BudgetDatabase;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
