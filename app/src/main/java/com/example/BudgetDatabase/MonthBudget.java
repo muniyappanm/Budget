@@ -143,24 +143,11 @@ public class MonthBudget extends AppCompatActivity
                     return;
                 }
                 list = new ArrayList<String>();
+                list.clear();
                 while (res.moveToNext()) {
                     list.add(res.getString(0));
 
                 }
-                /*Task<QuerySnapshot> data=db.View(
-                        Date1.getText().toString(),mTextView1.getText().toString()
-                        ,mTextView2.getText().toString());
-                if(data.getResult().isEmpty())
-                {
-                    //showMessage("Error","Nothing found");
-                    return;
-                }
-                for (QueryDocumentSnapshot Qdoc:data.getResult())
-                {
-                    Map<String ,Object> Mlist= Qdoc.getData();
-                    list.add(Mlist.get("count").toString());
-                }
-                Log.d("List.get(0)",list.get(0));*/
             }
 
             @Override
@@ -170,16 +157,27 @@ public class MonthBudget extends AppCompatActivity
                 changeItem(position,mTextView1.getText().toString(),mTextView2.getText().toString());
 
                 myDb.updateData(list.get(0),
-                        Date1.getText().toString(),mTextView1.getText().toString(),mTextView1.getText().toString());
-                /*db.Update(list.get(0),
-                        Date1.getText().toString(),mTextView2.getText().toString(),MonthBudget.this);*/
+                        Date1.getText().toString(),mTextView1.getText().toString(),mTextView2.getText().toString());
                 edit.setVisibility(View.VISIBLE);
                 delete.setVisibility(View.VISIBLE);
                 ok.setVisibility(View.INVISIBLE);
                 mTextView1.setEnabled(false);
                 mTextView2.setEnabled(false);
                 Total.setText("0");
-                View();
+                mExampleItem.clear();
+                mRecyclerView.setLayoutManager(null);
+                buildRecyclerView();
+                Cursor res = null;
+                if(myDb.getbyDate(Date1.getText().toString())==null) return;
+                else  res = myDb.getbyDate(Date1.getText().toString());
+                int i=0;
+                while (res.moveToNext()) {
+                    mExampleItem.add(new ExampleItem(R.drawable.ic_money, res.getString(2),
+                            res.getString(3), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+
+                    i+=Integer.parseInt(res.getString(3));
+                }
+                Total.setText(""+i);
 
             }
         });
@@ -299,27 +297,6 @@ public class MonthBudget extends AppCompatActivity
         }
         Total.setText(""+i);
 
-        /*Task<QuerySnapshot> data=null;
-
-        data=db.View(
-                Date1.getText().toString());
-        if(data.getResult().isEmpty())
-        {
-            //showMessage("Error","Nothing found");
-            return;
-        }
-        buildRecyclerView();
-        int i=0;
-        for (QueryDocumentSnapshot Qdoc:data.getResult())
-        {
-            Map<String ,Object> Mlist=null;
-            Mlist= Qdoc.getData();
-            mExampleItem.add(new ExampleItem(R.drawable.ic_money, Mlist.get("Item").toString(),
-                    Mlist.get("Rate").toString(), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
-            i+=Integer.parseInt(Mlist.get("Rate").toString());
-        }
-        Total.setText(""+i);
-         data=null;*/
     }
 
 

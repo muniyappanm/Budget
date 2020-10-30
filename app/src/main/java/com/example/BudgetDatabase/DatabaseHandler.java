@@ -15,7 +15,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String COL_4 = "Rate";
 
     public DatabaseHandler(Context context) {
-        super(context, DATABASE_NAME, null, 5);
+        super(context, DATABASE_NAME, null, 13);
         SQLiteDatabase db = this.getWritableDatabase();
     }
 

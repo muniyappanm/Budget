@@ -68,8 +68,7 @@ public class Popup extends AppCompatActivity {
                             "Empty Data not alloweded",Toast.LENGTH_SHORT).show();
                 else {
                     Intent in = new Intent();
-                    in.putExtra("text1",
-                            Item.getSelectedItem().toString()).putExtra("text2", mTextView2.getText().toString());
+                    in.putExtra("text1",Item.getSelectedItem().toString()).putExtra("text2", mTextView2.getText().toString());
                     setResult(RESULT_OK, in);
                     finish();
                 }
