@@ -1,6 +1,7 @@
 package com.example.BudgetDatabase;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Popup extends AppCompatActivity {
-    FireBaseHandler db=new FireBaseHandler();
+    DataBaseHandlerItem ItemDb;
     private FloatingActionButton floatingActionButton;
     private Spinner Item;
     private EditText mTextView2;
@@ -30,6 +31,7 @@ public class Popup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_small);
         Item = findViewById(R.id.spinner_item);
+        ItemDb = new DataBaseHandlerItem(this);
         mTextView2 = findViewById(R.id.editText_rate);
         floatingActionButton=findViewById(R.id.add);
         GetSpinnerItem();
@@ -38,21 +40,15 @@ public class Popup extends AppCompatActivity {
 
     private void GetSpinnerItem() {
         List<String> spinnerArray =  new ArrayList<String>();
-        Task<QuerySnapshot> data=null;
-        data=db.View();
-        if(data.getResult().isEmpty())
-        {
-            //showMessage("Error","Nothing found");
+        Cursor res = ItemDb.getAllData();
+        if(res.getCount() == 0) {
+            // show message
             return;
         }
-        for (QueryDocumentSnapshot Qdoc:data.getResult())
-        {
-            Map<String ,Object> Mlist=null;
-            Mlist= Qdoc.getData();
-            for(int i=1;i<=Mlist.size();i++)
-                spinnerArray.add(Mlist.get("Item"+i).toString());
+        while (res.moveToNext()) {
+            spinnerArray.add(res.getString(1));
+
         }
-        data=null;
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(

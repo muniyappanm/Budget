@@ -17,20 +17,17 @@
         <activity android:name="com.example.BudgetDatabase.AddItem" />
         <activity android:name="com.example.BudgetDatabase.ReportChart" />
         <activity android:name="com.example.BudgetDatabase.Report" />
-        <activity android:name="com.example.BudgetDatabase.MenuActivity" />
-        <activity android:name="com.example.BudgetDatabase.ViewPage" />
+        <activity android:name="com.example.BudgetDatabase.MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name="com.example.BudgetDatabase.Popup"
             android:theme="@style/DialogTheme" />
         <activity android:name="com.example.BudgetDatabase.MonthBudget" />
-        <activity android:name="com.example.BudgetDatabase.Register" />
-        <activity android:name="com.example.BudgetDatabase.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

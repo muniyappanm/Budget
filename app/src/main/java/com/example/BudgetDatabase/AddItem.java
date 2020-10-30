@@ -12,12 +12,12 @@ public class AddItem extends AppCompatActivity {
 
     EditText item;
     Button add;
-    FireBaseHandler db=new FireBaseHandler();
+    DataBaseHandlerItem ItemDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
-
+        ItemDb=new DataBaseHandlerItem(this);
         item=findViewById(R.id.add_add);
         add=(Button)findViewById(R.id.button_add);
         add.setOnClickListener(new View.OnClickListener() {
@@ -26,7 +26,7 @@ public class AddItem extends AppCompatActivity {
                 if(item.getText().toString().isEmpty())
                     Toast.makeText(AddItem.this,"Empty not alloweded",Toast.LENGTH_SHORT).show();
                 else {
-                    db.AddItem(item.getText().toString());
+                    ItemDb.insertData(item.getText().toString());
                     item.setText("");
                     Toast.makeText(AddItem.this,"Item Added Successfully",Toast.LENGTH_SHORT).show();
                 }

@@ -3,6 +3,7 @@ package com.example.BudgetDatabase;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -37,17 +38,18 @@ import java.util.List;
 import java.util.Map;
 
 public class ReportChart extends AppCompatActivity {
-    FireBaseHandler total=new FireBaseHandler();
     public ArrayList<MonthDateReport> monthDateReports=new ArrayList<>();
     public ArrayList<String> Datestring=new ArrayList<>();
     private float[] yData={1.0f,2.0f,3.2f};
     private String[] xData={"cricket","football","koko"};
     public PieChart pieChart;
     public BarChart barChart;
+    DatabaseHandler myDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myDB=new DatabaseHandler(this);
         setTitle("Report");
         setContentView(R.layout.activity_pie_chart);
         Bundle extras = getIntent().getExtras();
@@ -172,15 +174,17 @@ public class ReportChart extends AppCompatActivity {
             public void onValueSelected(Entry e, Highlight h) {
 
                 String month=monthDateReports.get((int) e.getX()).getMonth();
-                Task<QuerySnapshot> data=total.View(month);
-                if(data.getResult().isEmpty()) return;
-                String detail="";
-                List<String> list = new ArrayList<String>();
-                for (QueryDocumentSnapshot Qdoc:data.getResult())
-                {
-                    Map<String ,Object> Mlist= Qdoc.getData();
-                    list.add(Mlist.get("Item").toString()+"=Rs."+Mlist.get("Rate").toString()+" ");
+                Cursor res = myDB.getbyDate(month);
+                if(res.getCount() == 0) {
+                    // show message
+                    return;
                 }
+                ArrayList<String> list = new ArrayList<String>();
+                while (res.moveToNext()) {
+                    list.add(res.getString(2)+"="+res.getString(3)+" ");
+
+                }
+                String detail="";
                 for (String x:list) {
 
                     detail+=x;
@@ -215,13 +219,15 @@ public class ReportChart extends AppCompatActivity {
 
     private int Rate(String date){
         int rate = 0;
-        Task<QuerySnapshot> data=total.View(date);
-        if(data.getResult().isEmpty()) return 0;
-        List<String> list = new ArrayList<String>();
-        for (QueryDocumentSnapshot Qdoc:data.getResult())
-        {
-            Map<String ,Object> Mlist= Qdoc.getData();
-            list.add(Mlist.get("Rate").toString());
+        Cursor res = myDB.getbyDate(date);
+        if(res.getCount() == 0) {
+            // show message
+            return 0;
+        }
+        ArrayList<String> list = new ArrayList<String>();
+        while (res.moveToNext()) {
+            list.add(res.getString(3));
+
         }
         for (String x:list) {
 

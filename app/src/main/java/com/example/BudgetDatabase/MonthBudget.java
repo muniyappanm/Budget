@@ -2,6 +2,7 @@ package com.example.BudgetDatabase;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,13 +33,13 @@ import java.util.Map;
 
 public class MonthBudget extends AppCompatActivity 
 {
+    DatabaseHandler myDb;
     List<String> list = new ArrayList<String>();
     public ArrayList<ExampleItem> mExampleItem=new ArrayList<>();
     private RecyclerView mRecyclerView;
     private ExampleAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton floatingActionButton;
-    FireBaseHandler db=new FireBaseHandler();
     DatePickerDialog datePickerDialog;
     Calendar c=Calendar.getInstance();
     int yyyy=c.get(Calendar.YEAR);
@@ -60,6 +61,7 @@ public class MonthBudget extends AppCompatActivity
         rate=(TextView) findViewById(R.id.textView_Rate);
         ItemText=(EditText)findViewById(R.id.editText_item);
         RateText=(EditText)findViewById(R.id.editText_rate);
+        myDb = new DatabaseHandler(this);
         buildRecyclerView();
         String date_n = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         Date1.setText(date_n);
@@ -105,24 +107,22 @@ public class MonthBudget extends AppCompatActivity
                                      EditText mTextView2) {
                 mExampleItem.remove(position);
                 mAdapter.notifyItemRemoved(position);
-                Task<QuerySnapshot> data=db.View(
-                        Date1.getText().toString(),mTextView1.getText().toString()
+                Cursor res = myDb.getSelectedData(Date1.getText().toString(),mTextView1.getText().toString()
                         ,mTextView2.getText().toString());
-                if(data.getResult().isEmpty())
-                {
-                    //showMessage("Error","Nothing found");
+                if(res.getCount() == 0) {
+                    // show message
                     return;
                 }
                 List<String> list = new ArrayList<String>();
-                for (QueryDocumentSnapshot Qdoc:data.getResult())
-                {
-                    Map<String ,Object> Mlist= Qdoc.getData();
-                    list.add(Mlist.get("count").toString());
+                while (res.moveToNext()) {
+                    list.add(res.getString(0));
+
                 }
                 for (String i:list
                      ) {
-                    db.delete(i,MonthBudget.this);
+                    myDb.deleteData(i,MonthBudget.this);
                 }
+
                 Total.setText("0");
                 View();
 
@@ -136,7 +136,18 @@ public class MonthBudget extends AppCompatActivity
                 ok.setVisibility(View.VISIBLE);
                 mTextView1.setEnabled(false);
                 mTextView2.setEnabled(true);
-                Task<QuerySnapshot> data=db.View(
+                Cursor res = myDb.getSelectedData(Date1.getText().toString(),mTextView1.getText().toString()
+                        ,mTextView2.getText().toString());
+                if(res.getCount() == 0) {
+                    // show message
+                    return;
+                }
+                list = new ArrayList<String>();
+                while (res.moveToNext()) {
+                    list.add(res.getString(0));
+
+                }
+                /*Task<QuerySnapshot> data=db.View(
                         Date1.getText().toString(),mTextView1.getText().toString()
                         ,mTextView2.getText().toString());
                 if(data.getResult().isEmpty())
@@ -149,7 +160,7 @@ public class MonthBudget extends AppCompatActivity
                     Map<String ,Object> Mlist= Qdoc.getData();
                     list.add(Mlist.get("count").toString());
                 }
-                Log.d("List.get(0)",list.get(0));
+                Log.d("List.get(0)",list.get(0));*/
             }
 
             @Override
@@ -157,8 +168,11 @@ public class MonthBudget extends AppCompatActivity
                                  ImageView delete, ImageView ok, EditText mTextView1, EditText mTextView2) {
 
                 changeItem(position,mTextView1.getText().toString(),mTextView2.getText().toString());
-                db.Update(list.get(0),
-                        Date1.getText().toString(),mTextView2.getText().toString(),MonthBudget.this);
+
+                myDb.updateData(list.get(0),
+                        Date1.getText().toString(),mTextView1.getText().toString(),mTextView1.getText().toString());
+                /*db.Update(list.get(0),
+                        Date1.getText().toString(),mTextView2.getText().toString(),MonthBudget.this);*/
                 edit.setVisibility(View.VISIBLE);
                 delete.setVisibility(View.VISIBLE);
                 ok.setVisibility(View.INVISIBLE);
@@ -265,14 +279,28 @@ public class MonthBudget extends AppCompatActivity
                         data.getStringExtra("text2"), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
                 int i=Integer.parseInt(Total.getText().toString())+Integer.parseInt(data.getStringExtra("text2"));
                 Total.setText(""+i);
-                db.Add(Date1.getText().toString(), data.getStringExtra("text1"),
-                        data.getStringExtra("text2"),MonthBudget.this);
+                myDb.insertData(Date1.getText().toString(), data.getStringExtra("text1"),
+                        data.getStringExtra("text2"));
             }
     }
     void View(){
         mExampleItem.clear();
         mRecyclerView.setLayoutManager(null);
-        Task<QuerySnapshot> data=null;
+        buildRecyclerView();
+        Cursor res = null;
+        if(myDb.getbyDate(Date1.getText().toString())==null) return;
+        else  res = myDb.getbyDate(Date1.getText().toString());
+        int i=0;
+        while (res.moveToNext()) {
+            mExampleItem.add(new ExampleItem(R.drawable.ic_money, res.getString(2),
+                    res.getString(3), R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
+
+          i+=Integer.parseInt(res.getString(3));
+        }
+        Total.setText(""+i);
+
+        /*Task<QuerySnapshot> data=null;
+
         data=db.View(
                 Date1.getText().toString());
         if(data.getResult().isEmpty())
@@ -291,7 +319,7 @@ public class MonthBudget extends AppCompatActivity
             i+=Integer.parseInt(Mlist.get("Rate").toString());
         }
         Total.setText(""+i);
-         data=null;
+         data=null;*/
     }
 
 

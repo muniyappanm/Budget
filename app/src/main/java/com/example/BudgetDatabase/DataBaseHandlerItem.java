@@ -6,22 +6,20 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseHandler extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = "Budget.db";
-    public static final String TABLE_NAME = "Budget_Table";
+public class DataBaseHandlerItem extends SQLiteOpenHelper {
+    public static final String DATABASE_NAME = "Item.db";
+    public static final String TABLE_NAME = "Item_Table";
     public static final String COL_1 = "ID";
-    public static final String COL_2 = "Date";
-    public static final String COL_3 = "Item";
-    public static final String COL_4 = "Rate";
+    public static final String COL_2 = "Item";
 
-    public DatabaseHandler(Context context) {
-        super(context, DATABASE_NAME, null, 5);
+    public DataBaseHandlerItem(Context context) {
+        super(context, DATABASE_NAME, null, 1);
         SQLiteDatabase db = this.getWritableDatabase();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + TABLE_NAME +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,Date TEXT,Item TEXT,Rate INTEGER)");
+        db.execSQL("create table " + TABLE_NAME +" (ID INTEGER PRIMARY KEY AUTOINCREMENT,Item TEXT)");
     }
 
     @Override
@@ -30,12 +28,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertData(String Date,String Item,String Rate) {
+    public void insertData(String Item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COL_2,Date);
-        contentValues.put(COL_3,Item);
-        contentValues.put(COL_4,Rate);
+        contentValues.put(COL_2,Item);
         db.insert(TABLE_NAME, null, contentValues);
     }
 
@@ -45,22 +41,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return res;
     }
 
-    public Cursor getbyDate(String Date) {
+  /*  public Cursor getbyDate(String Date) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res=null;
-        res = db.rawQuery("select * from "+TABLE_NAME+ " WHERE "+COL_2+"= ?"
+        res = db.rawQuery("select * from "+TABLE_NAME+ " WHERE "+COL_2
                 ,new String[] {Date});
-        if (res==null)
-            return null;
-        else
         return res;
     }
     public Cursor getSelectedData(String Date,String Item,String Rate) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res=null;
-             res = db.rawQuery("select * from "+TABLE_NAME+ " WHERE "+COL_2+"= ?" +" AND "+COL_3+"= ?"
-                             +" AND "+COL_4+"= ?"
-                    ,new String[] {Date,Item,Rate});
+        res = db.rawQuery("select * from "+TABLE_NAME+ " WHERE "+COL_2+"= ?" +" AND "+COL_3+"= ?"
+                        +" AND "+COL_4+"= ?"
+                ,new String[] {Date,Item,Rate});
         return res;
     }
 
@@ -78,5 +71,5 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void deleteData(String id, MonthBudget monthBudget) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, "ID = ?",new String[] {id});
-    }
+    }*/
 }
