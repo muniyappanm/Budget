@@ -3,13 +3,11 @@
 <resources>
 
     <string name="app_name">Budget</string>
-    <string name="title_activity_help">ScrollingActivity</string>
     <string name="large_text">
-        "Budget.\n\n"
-         "Budget is an application designed to organize your expenses, your"
-         "movements of money are recorded by date, you can review the reports daily, weekly,"
-         "monthly in Bar Chart.Organizing your expenses allow you to have a better control over"
-         "your money.\n\n"
+         Budget is an application designed to organize your expenses, your
+         movements of money are recorded by date, you can review the reports daily, weekly,
+         monthly in Bar Chart.Organizing your expenses allow you to have a better control over
+         your money
     </string>
 
 </resources>

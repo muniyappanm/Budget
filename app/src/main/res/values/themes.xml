@@ -14,18 +14,10 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.Budget.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="navigationIcon">@drawable/ic_clear_white_24dp</item>
     </style>
 
-    <style name="Theme.Budget.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.Budget.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

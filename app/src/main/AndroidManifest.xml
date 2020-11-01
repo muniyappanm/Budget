@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.BudgetDatabase">
+    package="com.dhumuni.BudgetDatabase">
 
     <application
         android:allowBackup="true"
@@ -9,25 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Budget">
-        <activity
-            android:name="com.example.BudgetDatabase.Help"
-            android:label="@string/title_activity_help"
-            android:theme="@style/Theme.Budget.NoActionBar"></activity>
-        <activity android:name="com.example.BudgetDatabase.Contact" />
-        <activity android:name="com.example.BudgetDatabase.AddItem" />
-        <activity android:name="com.example.BudgetDatabase.ReportChart" />
-        <activity android:name="com.example.BudgetDatabase.Report" />
-        <activity android:name="com.example.BudgetDatabase.MainActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".Help"></activity>
+        <activity android:name=".DeleteItem" />
+        <activity android:name=".Contact" />
+        <activity android:name=".AddItem" />
+        <activity android:name=".ReportChart" />
+        <activity android:name=".Report" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
-            android:name="com.example.BudgetDatabase.Popup"
+            android:name=".Popup"
             android:theme="@style/DialogTheme" />
-        <activity android:name="com.example.BudgetDatabase.MonthBudget" />
+        <activity android:name=".MonthBudget" />
     </application>
 
 </manifest>

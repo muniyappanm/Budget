@@ -13,27 +13,26 @@
         android:layout_marginLeft="100dp"
         android:layout_centerHorizontal="true"
         android:textSize="20dp"
-        android:text="Add Item" />
-    <EditText
-        android:id="@+id/add_add"
+        android:text="Delete Item" />
+    <Spinner
+        android:id="@+id/deletespinner"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="100dp"
         android:layout_marginLeft="100dp"
         android:layout_below="@id/add_item"
-        android:hint="Add expense name here"
         android:background="@drawable/edit_round"
         android:layout_centerHorizontal="true" />
     <Button
-        android:id="@+id/button_add"
+        android:id="@+id/button_delete"
         android:layout_width="200dp"
-        android:layout_below="@id/add_add"
+        android:layout_below="@id/deletespinner"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="10dp"
-        android:text="Add" />
+        android:text="Delete" />
 
 </RelativeLayout>
