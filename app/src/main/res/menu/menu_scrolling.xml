@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.budget.ScrollingActivity">
     <item
-        android:id="@+id/logoutmenu"
-        android:title="Logout"/>
-    <item
         android:id="@+id/additem_menu"
         android:title="Add Item" />
 </menu>

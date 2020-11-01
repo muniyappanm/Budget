@@ -72,10 +72,6 @@ public class MenuActivity extends AppCompatActivity {
 
         int id=item.getItemId();
         switch (id){
-            case R.id.logoutmenu:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MenuActivity.this,MainActivity.class));
-                break;
             case R.id.additem_menu:
                 startActivity(new Intent(MenuActivity.this,AddItem.class));
                 break;

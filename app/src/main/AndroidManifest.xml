@@ -18,7 +18,6 @@
         <activity android:name=".ReportChart" />
         <activity android:name=".Report" />
         <activity android:name=".MenuActivity" />
-        <activity android:name=".ViewPage" />
         <activity
             android:name=".Popup"
             android:theme="@style/DialogTheme" />
