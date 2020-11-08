@@ -74,6 +74,8 @@ public class MonthBudget extends AppCompatActivity
         ItemText=(EditText)findViewById(R.id.editText_item);
         RateText=(EditText)findViewById(R.id.editText_rate);
         buildRecyclerView();
+        mExampleItem.add(new ExampleItem(R.drawable.ic_money, "text1",
+               "text2", R.drawable.ic_edit,R.drawable.ic_delete,R.drawable.ic_save));
         String date_n = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
         Date1.setText(date_n);
         PopUp();
@@ -307,5 +309,5 @@ public class MonthBudget extends AppCompatActivity
          data=null;
     }
 
-
+    
 }

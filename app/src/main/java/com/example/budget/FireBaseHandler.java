@@ -87,7 +87,6 @@ public class FireBaseHandler extends AppCompatActivity
     }
     public Task<QuerySnapshot> View()
     {
-        FirebaseFirestore db=FirebaseFirestore.getInstance();
         Task<QuerySnapshot> doc=null;
         Map<String ,Object> data= new HashMap<>();
         doc= FirebaseFirestore.getInstance().collection("Budget").
@@ -98,6 +97,22 @@ public class FireBaseHandler extends AppCompatActivity
                         Log.d("Document", "ok");
                     }
                 });
+        while (!doc.isComplete())
+            continue;
+        return doc;
+    }
+    public Task<QuerySnapshot> Total()
+    {
+        Task<QuerySnapshot> doc=null;
+        Map<String ,Object> data= new HashMap<>();
+        doc= FirebaseFirestore.getInstance().collection("Budget").
+                document(user.getUid()).collection("budget").
+                get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Log.d("Document", "ok");
+            }
+        });
         while (!doc.isComplete())
             continue;
         return doc;
@@ -141,7 +156,6 @@ public class FireBaseHandler extends AppCompatActivity
             continue;
         return doc;
     }
-
     public void delete(String ID,MonthBudget monthBudget) {
         FirebaseFirestore db=FirebaseFirestore.getInstance();
         FirebaseFirestore.getInstance().collection("Budget").document(user.getUid()).

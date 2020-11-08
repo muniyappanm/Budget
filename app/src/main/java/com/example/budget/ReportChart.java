@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ReportChart extends AppCompatActivity {
+    ArrayList<String> Label=new ArrayList<>();
     FireBaseHandler total=new FireBaseHandler();
     public ArrayList<MonthDateReport> monthDateReports=new ArrayList<>();
     public ArrayList<String> Datestring=new ArrayList<>();
@@ -46,6 +48,7 @@ public class ReportChart extends AppCompatActivity {
     private String[] xData={"cricket","football","koko"};
     public PieChart pieChart;
     public BarChart barChart;
+    TextView totalexpense;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class ReportChart extends AppCompatActivity {
         String from= extras.getString("from");
         String to= extras.getString("to");
         ReportData(from,to);
+        totalexpense=findViewById(R.id.total);
         //pieChart.setDrawEntryLabels(true);
         //PieChart();
         BarCharts();
@@ -134,9 +138,24 @@ public class ReportChart extends AppCompatActivity {
 
 
     }*/
-    private void BarCharts(){
+    private void Total(){
+        Task<QuerySnapshot> data=total.Total();
+        if(data.getResult().isEmpty()) return;
+        int detail=0;
+        List<String> list = new ArrayList<String>();
+        for (QueryDocumentSnapshot Qdoc:data.getResult())
+        {
+            Map<String ,Object> Mlist= Qdoc.getData();
+            if(Datestring.contains(Mlist.get("Date").toString()))
+            list.add(Mlist.get("Rate").toString());
+        }
+        for (String x:list) {
 
-        ArrayList<String> Label=new ArrayList<>();
+            detail+=Integer.parseInt(x);
+        }
+        totalexpense.setText("Rs."+detail);
+    }
+    private void BarCharts(){
         barChart=(BarChart)findViewById(R.id.barchart);
         ArrayList<BarEntry> barEntries=new ArrayList<>();
         barChart.setDescription(new Description());
@@ -148,6 +167,7 @@ public class ReportChart extends AppCompatActivity {
             barEntries.add(new BarEntry(i,expense));
             Label.add(month);
         }
+        Total();
         BarDataSet barDataSet=new BarDataSet(barEntries,"Daily Expenses in Rs");
         barDataSet.setBarBorderWidth(1f);
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);

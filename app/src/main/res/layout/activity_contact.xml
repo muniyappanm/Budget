@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/mobile"
         android:layout_below="@id/name"
-        android:text="Mobile No:8870887201"
+        android:text="Mobile No:+918870887201"
         android:textSize="20dp"/>
     <TextView
         android:layout_width="match_parent"
