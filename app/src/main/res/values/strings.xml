@@ -2,7 +2,7 @@
 
 <resources>
 
-    <string name="app_name">Budget</string>
+    <string name="app_name">digiTracker Expenses</string>
     <string name="large_text">
          Budget is an application designed to organize your expenses, your
          movements of money are recorded by date, you can review the reports daily, weekly,
