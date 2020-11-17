@@ -8,4 +8,7 @@
     <item
         android:id="@+id/deleteitem_menu"
         android:title="Delete Item" />
+    <item
+        android:id="@+id/selectcurrency_menu"
+        android:title="Select Currency" />
 </menu>

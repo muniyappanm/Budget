@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Budget">
-        <activity android:name=".Help"></activity>
+        <activity android:name=".SelectCurrency"></activity>
+        <activity android:name=".Help" />
         <activity android:name=".DeleteItem" />
         <activity android:name=".Contact" />
         <activity android:name=".AddItem" />

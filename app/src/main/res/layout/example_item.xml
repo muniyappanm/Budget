@@ -24,7 +24,7 @@
             android:text="Rs."
             android:textSize="20sp"
             android:layout_toRightOf="@id/imageView"
-            android:id="@+id/rs" />
+            android:id="@+id/currency" />
 
         <EditText
             android:id="@+id/textView"
@@ -46,13 +46,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView"
-            android:layout_toEndOf="@+id/rs"
-            android:layout_toRightOf="@+id/rs"
+            android:layout_toEndOf="@+id/currency"
+            android:layout_toRightOf="@+id/currency"
             android:background="@drawable/edit_round"
             android:ems="6"
             android:text="Line 2"
+            android:layout_marginStart="5dp"
             android:inputType="number"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:layout_marginLeft="5dp" />
 
         <ImageView
             android:id="@+id/fabedit"
