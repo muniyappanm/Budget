@@ -4,10 +4,11 @@
 
     <string name="app_name">digiTracker Expenses</string>
     <string name="large_text">
-         Budget is an application designed to organize your expenses, your
-         movements of money are recorded by date, you can review the reports daily, weekly,
-         monthly in Bar Chart.Organizing your expenses allow you to have a better control over
-         your money
+        "* No.1 financial planning, review, expense tracking, and personal asset management app for Android!.\n\n"
+        "* It makes managing personal finances as easy as bar chart! Now easily record your personal and business"
+        "financial transactions, generate spending reports, review your daily, weekly and monthly financial data and"
+        "manage your assets with digiTracker Expenses and budget planner.\n\n"
+        "* It shows your expenses by a graph so you can see the amount of your expense against your budget quickly and"
+        "make suitable financial inferences."
     </string>
-
 </resources>

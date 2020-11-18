@@ -1,19 +1,17 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity">
-
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Help">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
             <TextView
                 android:id="@+id/budget"
                 android:layout_width="match_parent"
@@ -21,25 +19,24 @@
                 android:layout_centerHorizontal="true"
                 android:textSize="30dp"
                 android:textStyle="bold"
-                android:text="Budget"/>
+                android:text="@string/app_name"/>
+           <!--<include layout="@layout/content_scrolling" />-->
+           <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_below="@id/budget"
+               android:id="@+id/text"
+            android:textSize="20dp"
+           android:text="@string/large_text" />
             <TextView
-                android:layout_marginTop="10dp"
-                android:id="@+id/add_item"
-                android:layout_below="@id/budget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:textSize="20dp"
-                android:text="@string/large_text"/>
-            <TextView
-                android:layout_marginTop="10dp"
                 android:layout_below="@id/budget"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                android:text="Add or Delete Item" />
+                android:text="Add,Delete Item or Select Currency Symbol" />
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,6 +70,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/delete"/>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text="Select Currency Symbol" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/selectcurrency"/>
             <TextView
                 android:layout_marginTop="10dp"
                 android:layout_below="@id/budget"
@@ -99,9 +109,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/daytoday"/>
-        </LinearLayout>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:text="Report" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/report"/>
+    </LinearLayout>
     </ScrollView>
-
-
-
 </RelativeLayout>
