@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Budget">
-        <activity android:name=".SelectCurrency"></activity>
+        <activity android:name=".SelectCurrency" />
         <activity android:name=".Help" />
         <activity android:name=".DeleteItem" />
         <activity android:name=".Contact" />
@@ -19,7 +19,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

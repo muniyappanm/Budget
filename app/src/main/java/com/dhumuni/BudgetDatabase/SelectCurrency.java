@@ -36,9 +36,14 @@ public class SelectCurrency extends AppCompatActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CurrencyDb.updateData(autocompletecurrency.getText().toString());
-                Toast.makeText(SelectCurrency.this,"Currency Selected Successfully",Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(SelectCurrency.this,MainActivity.class));
+                if(autocompletecurrency.getText().toString().isEmpty())
+                    Toast.makeText(SelectCurrency.this,"Empty not alloweded",Toast.LENGTH_SHORT).show();
+                else {
+
+                    CurrencyDb.updateData(autocompletecurrency.getText().toString());
+                    Toast.makeText(SelectCurrency.this, "Currency Selected Successfully", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(SelectCurrency.this, MainActivity.class));
+                }
             }
         });
     }
